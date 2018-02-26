@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "network";
+
+package n0stack.resource.network;
+
+import "resource/model.proto";
+
+message Network {
+  n0stack.resource.Resource resource = 1;
+  uint64 cidr = 2;
+}

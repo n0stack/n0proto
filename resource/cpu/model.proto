@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "cpu";
+
+package n0stack.resource.cpu;
+
+import "resource/model.proto";
+
+message CPU {
+  n0stack.resource.Resource resource = 1;
+  string architecture = 2;
+	uint32 vcpus = 3;
+}

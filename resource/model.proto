@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option go_package = "resource";
+
+package n0stack.resource;
+
+import "model.proto";
+
+message Resource {
+  n0stack.Model model = 1;
+}

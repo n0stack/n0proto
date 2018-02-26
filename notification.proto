@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "n0stack";
+
+package n0stack;
+
+message Notification {
+  bool success = 1;
+  string notifiedAt = 2;
+  string operation = 10;
+  string description = 11;
+}

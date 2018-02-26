@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "ipv4addr";
+
+package n0stack.resource.ipv4addr;
+
+import "resource/model.proto";
+
+message IPv4Address {
+  n0stack.resource.Resource resource = 1;
+  string address = 2;
+}

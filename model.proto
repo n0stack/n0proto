@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option go_package = "n0stack";
+
+package n0stack;
+
+message Model {
+  bytes id = 1;
+  string name = 2;  
+}

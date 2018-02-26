@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "volume";
+
+package n0stack.device.volume;
+
+import "model.proto";
+import "notification.proto";
+
+message Status {
+  string url = 1;
+}
+
+service Agent {
+  rpc GetStatus(n0stack.Model) returns (Status)                      {}
+  rpc Enable(n0stack.Model)    returns (stream n0stack.Notification) {}
+  rpc Disable(n0stack.Model)   returns (stream n0stack.Notification) {}
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "hwaddr";
+
+package n0stack.resource.hwaddr;
+
+import "resource/model.proto";
+
+message HardwareAddress {
+  n0stack.resource.Resource resource = 1;
+  string address = 2;
+}

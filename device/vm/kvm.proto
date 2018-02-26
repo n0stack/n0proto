@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "vm";
+
+package n0stack.device.vm;
+
+import "model.proto";
+import "notification.proto";
+import "device/nic/model.proto";
+import "device/volume/model.proto";
+
+message Status {
+  map<string, n0stack.device.volume.Spec> volume = 1;
+  repeated n0stack.device.nic.Spec nic = 2; 
+}
+
+message FileOnKVM {
+  n0stack.Model vm = 1;
+  n0stack.Model volume = 2;
+  string path = 3;
+}
+
+message TapOnKVM {
+  n0stack.Model vm = 1;
+  n0stack.Model tap = 2;
+}
+
+service Agent {
+  rpc GetStatus(n0stack.Model)    returns (Status) {}
+  rpc Boot(n0stack.Model)         returns (stream n0stack.Notification) {}
+  rpc Reboot(n0stack.Model)       returns (stream n0stack.Notification) {}
+  rpc HardReboot(n0stack.Model)   returns (stream n0stack.Notification) {}
+  rpc Shutdown(n0stack.Model)     returns (stream n0stack.Notification) {}
+  rpc HardShutdown(n0stack.Model) returns (stream n0stack.Notification) {}
+  rpc Save(n0stack.Model)         returns (stream n0stack.Notification) {}
+  rpc AttachTap(TapOnKVM)         returns (stream n0stack.Notification) {}
+  rpc AttachFile(FileOnKVM)       returns (stream n0stack.Notification) {}
+}

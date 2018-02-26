@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "storage";
+
+package n0stack.resource.storage;
+
+import "resource/model.proto";
+
+message Storage {
+  n0stack.resource.Resource resource = 1;
+  uint64 bytes = 2;
+}

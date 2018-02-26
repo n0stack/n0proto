@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "memory";
+
+package n0stack.resource.memory;
+
+import "resource/model.proto";
+
+message Memory {
+  n0stack.resource.Resource resource = 1;
+  uint64 bytes = 2;
+}
