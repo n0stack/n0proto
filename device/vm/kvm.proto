@@ -19,6 +19,7 @@ message NIC {
 }
 
 message Status {
+  string runLevel = 1;
   // map<string, n0stack.device.volume.Spec> volume = 1;
   // repeated n0stack.device.volume.Spec volume = 1;
   repeated NIC nic = 2; 
