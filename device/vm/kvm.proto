@@ -6,12 +6,22 @@ package n0stack.device.vm;
 
 import "model.proto";
 import "notification.proto";
-import "device/nic/model.proto";
-import "device/volume/model.proto";
+import "resource/network/model.proto";
+import "resource/hwaddr/model.proto";
+import "resource/ipv4addr/model.proto";
+
+message NIC {
+  n0stack.resource.network.Spec network = 1;
+  n0stack.resource.hwaddr.Spec hwaddr = 2;
+  repeated n0stack.resource.ipv4addr.Spec ipv4addr = 3;
+  string bridge = 4;
+  string tap = 5;
+}
 
 message Status {
-  map<string, n0stack.device.volume.Spec> volume = 1;
-  repeated n0stack.device.nic.Spec nic = 2; 
+  // map<string, n0stack.device.volume.Spec> volume = 1;
+  // repeated n0stack.device.volume.Spec volume = 1;
+  repeated NIC nic = 2; 
 }
 
 message FileOnKVM {
@@ -22,7 +32,9 @@ message FileOnKVM {
 
 message TapOnKVM {
   n0stack.Model vm = 1;
-  n0stack.Model tap = 2;
+  // n0stack.Model network = 2;
+  string bridge = 2;
+  repeated n0stack.resource.ipv4addr.Spec ipv4addr = 3;
 }
 
 service Agent {

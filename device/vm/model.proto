@@ -11,14 +11,14 @@ import "resource/cpu/model.proto";
 import "resource/memory/model.proto";
 
 message Spec {
-  n0stack.device.Device device = 1;
-  n0stack.resource.cpu.CPU cpu = 2;
-  n0stack.resource.memory.Memory memory = 3;
+  n0stack.device.Spec device = 1;
+  n0stack.resource.cpu.Spec cpu = 2;
+  n0stack.resource.memory.Spec memory = 3;
 }
 
 service Repository {
-  rpc Create(n0stack.device.vm.Spec) returns (stream n0stack.Notification) {}
-  rpc Read(n0stack.Model)            returns (Spec) {}
-  rpc Update(n0stack.device.vm.Spec) returns (stream n0stack.Notification) {}
-  rpc Delete(n0stack.Model)          returns (stream n0stack.Notification) {}
+  rpc Create(Spec)          returns (stream n0stack.Notification) {}
+  rpc Read(n0stack.Model)   returns (Spec) {}
+  rpc Update(Spec)          returns (stream n0stack.Notification) {}
+  rpc Delete(n0stack.Model) returns (stream n0stack.Notification) {}
 }

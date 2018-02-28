@@ -6,6 +6,6 @@ package n0stack.resource;
 
 import "model.proto";
 
-message Resource {
+message Spec {
   n0stack.Model model = 1;
 }

@@ -4,10 +4,19 @@ option go_package = "cpu";
 
 package n0stack.resource.cpu;
 
+import "model.proto";
+import "notification.proto";
 import "resource/model.proto";
 
-message CPU {
-  n0stack.resource.Resource resource = 1;
+message Spec {
+  n0stack.resource.Spec resource = 1;
   string architecture = 2;
 	uint32 vcpus = 3;
+}
+
+service Repository {
+  rpc Create(Spec)          returns (stream n0stack.Notification) {}
+  rpc Read(n0stack.Model)   returns (Spec)  {}
+  rpc Update(Spec)          returns (stream n0stack.Notification) {}
+  rpc Delete(n0stack.Model) returns (stream n0stack.Notification) {}
 }

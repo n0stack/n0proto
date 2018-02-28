@@ -4,9 +4,18 @@ option go_package = "memory";
 
 package n0stack.resource.memory;
 
+import "model.proto";
+import "notification.proto";
 import "resource/model.proto";
 
-message Memory {
-  n0stack.resource.Resource resource = 1;
+message Spec {
+  n0stack.resource.Spec resource = 1;
   uint64 bytes = 2;
+}
+
+service Repository {
+  rpc Create(Spec)          returns (stream n0stack.Notification) {}
+  rpc Read(n0stack.Model)   returns (Spec)  {}
+  rpc Update(Spec)          returns (stream n0stack.Notification) {}
+  rpc Delete(n0stack.Model) returns (stream n0stack.Notification) {}
 }
