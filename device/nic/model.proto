@@ -1,21 +1,22 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto/resource/memory";
+option go_package = "github.com/n0stack/proto/device/nic";
 
-package n0stack.resource.memory;
+package n0stack.device.nic;
 
 import "model.proto";
 import "notification.proto";
-import "resource/model.proto";
+import "device/model.proto";
 
 message Spec {
-  n0stack.resource.Spec resource = 1;
-  uint64 bytes = 2;
+  n0stack.device.Spec device = 1;
+  n0stack.Model network = 2;
+  n0stack.Model hwAddr = 3;
 }
 
 service Repository {
   rpc Create(Spec)          returns (stream n0stack.Notification) {}
-  rpc Read(n0stack.Model)   returns (Spec)  {}
+  rpc Read(n0stack.Model)   returns (Spec) {}
   rpc Update(Spec)          returns (stream n0stack.Notification) {}
   rpc Delete(n0stack.Model) returns (stream n0stack.Notification) {}
 }

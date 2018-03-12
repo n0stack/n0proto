@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "volume";
+option go_package = "github.com/n0stack/proto/device/volume";
 
 package n0stack.device.volume;
 
@@ -10,8 +10,8 @@ import "device/model.proto";
 import "resource/storage/model.proto";
 
 message Spec {
-  n0stack.device.Device device = 1;
-  n0stack.resource.storage.Storage storage = 2;
+  n0stack.device.Spec device = 1;
+  n0stack.resource.storage.Spec storage = 2;
 }
 
 service Repository {

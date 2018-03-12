@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "ipv4addr";
+option go_package = "github.com/n0stack/proto/resource/ipv4addr";
 
 package n0stack.resource.ipv4addr;
 

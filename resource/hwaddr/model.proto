@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "hwaddr";
+option go_package = "github.com/n0stack/proto/resource/hwaddr";
 
 package n0stack.resource.hwaddr;
 

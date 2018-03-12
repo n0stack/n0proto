@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "resource";
+option go_package = "github.com/n0stack/proto/resource";
 
 package n0stack.resource;
 

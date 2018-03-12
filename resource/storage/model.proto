@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "storage";
+option go_package = "github.com/n0stack/proto/resource/storage";
 
 package n0stack.resource.storage;
 

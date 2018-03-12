@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "vm";
+option go_package = "github.com/n0stack/proto/device/vm";
 
 package n0stack.device.vm;
 
@@ -18,8 +18,14 @@ message NIC {
   string tap = 5;
 }
 
+enum RunLevel {
+  STOPED = 0;
+  RUNNING = 1;
+  SAVED = 2;
+}
+
 message Status {
-  string runLevel = 1;
+  RunLevel runLevel = 1;
   // map<string, n0stack.device.volume.Spec> volume = 1;
   // repeated n0stack.device.volume.Spec volume = 1;
   repeated NIC nic = 2; 
@@ -38,7 +44,7 @@ message TapOnKVM {
   repeated n0stack.resource.ipv4addr.Spec ipv4addr = 3;
 }
 
-service Agent {
+service KVM {
   rpc GetStatus(n0stack.Model)    returns (Status) {}
   rpc Boot(n0stack.Model)         returns (stream n0stack.Notification) {}
   rpc Reboot(n0stack.Model)       returns (stream n0stack.Notification) {}

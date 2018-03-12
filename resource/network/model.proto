@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "network";
+option go_package = "github.com/n0stack/proto/resource/network";
 
 package n0stack.resource.network;
 
@@ -10,7 +10,7 @@ import "resource/model.proto";
 
 message Spec {
   n0stack.resource.Spec resource = 1;
-  uint64 cidr = 2;
+  uint64 networkID = 2;
 }
 
 service Repository {

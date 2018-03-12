@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "cpu";
+option go_package = "github.com/n0stack/proto/resource/cpu";
 
 package n0stack.resource.cpu;
 

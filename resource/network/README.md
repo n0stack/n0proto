@@ -1,1 +1,3 @@
-ipv4 addressとhardware addressがnetworkに入れ子になるのでそこら辺どうするか
+# network
+
+ネットワークIDを仮想化

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "volume";
+option go_package = "github.com/n0stack/proto/device/volume";
 
 package n0stack.device.volume;
 

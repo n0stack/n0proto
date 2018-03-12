@@ -1,19 +1,19 @@
 syntax = "proto3";
 
-option go_package = "vm";
+option go_package = "github.com/n0stack/proto/device/vm";
 
 package n0stack.device.vm;
 
 import "model.proto";
 import "notification.proto";
 import "device/model.proto";
-import "resource/cpu/model.proto";
-import "resource/memory/model.proto";
 
 message Spec {
   n0stack.device.Spec device = 1;
-  n0stack.resource.cpu.Spec cpu = 2;
-  n0stack.resource.memory.Spec memory = 3;
+  n0stack.Model cpu = 2;
+  n0stack.Model memory = 3;
+  map<string, n0stack.Model> volume = 4;
+  repeated n0stack.Model nic = 5;
 }
 
 service Repository {
