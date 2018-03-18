@@ -4,8 +4,8 @@ option go_package = "github.com/n0stack/proto/resource";
 
 package n0stack.resource;
 
-import "model.proto";
+// import "model.proto";
 
 message Spec {
-  n0stack.Model model = 1;
+  // n0stack.Model model = 1;
 }
