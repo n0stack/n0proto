@@ -4,6 +4,8 @@ option go_package = "github.com/n0stack/proto/device/network/v0;network";
 
 package n0stack.device.network;
 
+import "google/protobuf/empty.proto";
+
 import "model.proto";
 import "resource/networkid/model.proto";
 
@@ -13,7 +15,7 @@ service Standard {
 
   rpc Apply(ApplyRequest) returns (Resource) {}
 
-  // rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
 }
 
 message Resource {
@@ -35,6 +37,6 @@ message ApplyRequest {
   Spec spec = 2;
 }
 
-// message DeleteRequest {
-//   n0stack.Model model = 1;
-// }
+message DeleteRequest {
+  n0stack.Model model = 1;
+}
