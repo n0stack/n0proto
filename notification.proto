@@ -7,8 +7,8 @@ package n0stack;
 import "google/protobuf/timestamp.proto";
 
 message Notification {
-  bool success = 1;
-  google.protobuf.Timestamp notifiedAt = 2;
-  string operation = 10;
-  string description = 11;
+  bool success = 1; // -> succeeded
+  google.protobuf.Timestamp notifiedAt = 2; // -> notify_time
+  string operation = 3;
+  string description = 4;
 }

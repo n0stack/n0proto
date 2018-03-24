@@ -6,17 +6,32 @@ package n0stack.device.volume;
 
 import "model.proto";
 import "notification.proto";
-import "device/model.proto";
 import "resource/storage/model.proto";
 
-message Spec {
-  n0stack.device.Spec device = 1;
-  n0stack.resource.storage.Spec storage = 2;
+service Standard {
+  // rpc List(ListRequest)    returns (Response) {}
+
+  // Get Status and Spec to generate from fact.
+  rpc Get(n0stack.Model)    returns (Response) {}
+
+  rpc Apply(Spec)           returns (Response) {}
+
+  rpc Delete(n0stack.Model) returns (Response) {} // Emptyを返すように変更する
+
+  // rpc Create(Spec) returns (stream n0stack.Notification) {} // 作る必要があるか迷っている
 }
 
-service Repository {
-  rpc Create(n0stack.device.volume.Spec) returns (stream n0stack.Notification) {}
-  rpc Read(n0stack.Model)                returns (Spec)  {}
-  rpc Update(n0stack.device.volume.Spec) returns (stream n0stack.Notification) {}
-  rpc Delete(n0stack.Model)              returns (stream n0stack.Notification) {}
+message Response {
+  Spec spec = 1; // Anyにしてしまって汎用的な定義にするのは手
+  Status status = 2; // ここも
+  n0stack.Notification notification = 3;  // 削除予定
+}
+
+message Spec {
+  n0stack.Model model = 1;
+  n0stack.resource.storage.Spec storage = 2; // n0stack.Modelで解決させたほうが集計しやすい気もするが…
+}
+
+message Status {
+  string url = 1;
 }
