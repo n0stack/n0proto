@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto/device/network/v0;network";
+
+package n0stack.device.network;
+
+import "model.proto";
+import "resource/networkid/model.proto";
+
+service Standard {
+  // rpc Create(Spec)          returns (stream n0stack.Notification) {}
+  // rpc Read(n0stack.Model)   returns (Spec) {}
+
+  rpc Apply(ApplyRequest) returns (Resource) {}
+
+  // rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+}
+
+message Resource {
+  n0stack.Model model = 1;
+  Spec spec = 2;
+  Status status = 3;
+}
+
+message Spec {
+  n0stack.resource.networkid.Spec networkId = 1;
+}  
+
+message Status {
+  string bridge = 1;
+}  
+
+message ApplyRequest {
+  n0stack.Model model = 1;
+  Spec spec = 2;
+}
+
+// message DeleteRequest {
+//   n0stack.Model model = 1;
+// }

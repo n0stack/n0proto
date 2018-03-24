@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto/resource/networkid/v0;networkid";
+
+package n0stack.resource.networkid;
+
+message Spec {
+  enum NetworkType {
+    FLAT = 0;
+    VLAN = 1;
+  }
+  NetworkType type = 1;
+  uint64 networkID = 2;
+}
