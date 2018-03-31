@@ -1,13 +1,14 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto/device/network/v0;network";
+option go_package = "github.com/n0stack/proto/device/tap/v0;tap";
 
-package n0stack.device.network;
+package n0stack.device.tap;
 
 import "google/protobuf/empty.proto";
 
 import "model.proto";
 import "resource/networkid/model.proto";
+// import "resource/hwaddr/model.proto";
 
 service Standard {
   // rpc Create(Spec)          returns (stream n0stack.Notification) {}
@@ -25,12 +26,14 @@ message Resource {
 }
 
 message Spec {
-  n0stack.resource.networkid.Spec networkId = 1;
-}  
+  n0stack.resource.networkid.Spec networkID = 1; // ネットワークは共用なので設定がコンフリクトする可能性が高く、危険
+  // n0stack.resource.hwaddr.Spec hwAddr = 3;
+}
 
 message Status {
-  string bridge = 1;
-}  
+  string tap = 1;
+  string bridge = 2;
+}
 
 message ApplyRequest {
   n0stack.Model model = 1;
