@@ -8,9 +8,10 @@ import "model.proto";
 import "notification.proto";
 import "device/model.proto";
 import "device/volume/model.proto";
-import "device/nic/model.proto";
+import "device/tap/model.proto";
 import "resource/cpu/model.proto";
 import "resource/memory/model.proto";
+import "resource/hwaddr/model.proto";
 
 enum RunLevel {
   SHUTDOWN = 0;
@@ -31,13 +32,16 @@ message Spec {
   n0stack.device.Spec device = 1;
   n0stack.resource.cpu.Spec cpu = 2;
   n0stack.resource.memory.Spec memory = 3;
-  repeated n0stack.device.volume.Spec volume = 4;
+  repeated n0stack.device.volume.Spec volumes = 4;
 
-  // message NIC {
-  //   repeated n0stack.device.bridge.Spec bridge = 5;
-  //   n0stack.resource.hwaddr.Spec hwAddr = 2;
-  // }
-  // repeated NIC nic = 5;
+  // NICは実体がないので、モデルを切り分けることは難しい
+  // openvswitchなどを直結するときとかも難しい
+  message NIC {
+    n0stack.Model model = 1;
+    n0stack.device.tap.Spec tap = 2;
+    n0stack.resource.hwaddr.Spec hwAddr = 3;
+  }
+  repeated NIC nics = 5;
 }  
 
 message Status {
