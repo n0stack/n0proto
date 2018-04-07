@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/go-proto/compute/v0;compute";
+
+package n0stack.compute;
+
+import "google/protobuf/empty.proto";
+
+import "metadata/v0/model.proto";
+
+service ComputeService {
+  rpc Get(GetRequest)   returns (Compute) {}
+
+  rpc Apply(ApplyRequest) returns (Compute) {}
+
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+}
+
+message Compute {
+  string id = 1;
+  n0stack.metadata.Metadata metadata = 2;
+  Spec spec = 3;
+  Status status = 4;
+}
+
+message Spec {
+  // node
+  // 実装予定
+  // message NodeSelector {
+  //   string id = 1;
+  //   map<string, string> labels = 2;
+  // }
+  // NodeSelector nodeSelector = 1;
+
+  // CPU
+  uint32 vcpus = 2;
+
+  // Memory
+  uint64 memoryBytes = 3;
+
+  // Volume
+  message NIC {
+    string network = 1;
+    repeated string ipAddrs = 2;
+  }
+}
+
+message Status {
+  string kvm = 1;
+
+  string qcow2 = 2;
+
+  repeated string taps = 3;
+}
+
+message GetRequest {
+  string id = 1;
+}
+
+message ApplyRequest {
+  string id = 1;
+  n0stack.metadata.Metadata metadata = 2;
+  Spec spec = 3;
+}
+
+message DeleteRequest {
+  string id = 1;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/go-proto/notification/v0;notification";
+
+package n0stack.notification;
+
+import "google/protobuf/timestamp.proto";
+
+message Notification {
+  bool succeeded = 1;
+  google.protobuf.Timestamp notify_time = 2;
+  string operation = 3;
+  string description = 4;
+}

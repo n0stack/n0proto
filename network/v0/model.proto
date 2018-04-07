@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/go-proto/network/v0;network";
+
+package n0stack.network;
+
+import "google/protobuf/empty.proto";
+
+import "metadata/v0/model.proto";
+
+service NetworkService {
+  rpc Get(GetRequest)   returns (Network) {}
+
+  rpc Apply(ApplyRequest) returns (Network) {}
+
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+}
+
+message Network {
+  string id = 1;
+  n0stack.metadata.Metadata metadata = 2;
+  Spec spec = 3;
+  Status status = 4;
+}
+
+message Spec {
+  enum NetworkType {
+    FLAT = 0;
+    VLAN = 1;
+  }
+  NetworkType type = 1;
+  uint64 networkID = 2;
+
+  string ipv4Cidr = 3;
+  string ipv4Gateway = 4;
+
+  string nameServer = 5;
+  string domain = 6;
+}
+
+message Status {
+}
+
+message GetRequest {
+  string id = 1;
+}
+
+message ApplyRequest {
+  string id = 1;
+  n0stack.metadata.Metadata metadata = 2;
+  Spec spec = 3;
+}
+
+message DeleteRequest {
+  string id = 1;
+}

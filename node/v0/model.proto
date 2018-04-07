@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/go-proto/node/v0;node";
+
+package n0stack.node;
+
+service NodeService {
+  rpc List(ListRequest) returns (ListResponse) {}
+
+  rpc Get(GetRequest) returns (Node) {}
+}
+
+message Node {
+  // MotherBoardのUUIDを用いる
+  string id = 1;
+
+  Status status = 4;
+}
+
+message Status {
+  // Architectureは全部x64だろうという気持ち
+  uint32 cpus = 1;
+
+  // Memory
+  uint64 memoryBytes = 2;
+
+  // Storage
+  uint64 storageBytes = 3;
+
+  // Network
+}
+
+message ListRequest {
+}
+
+message ListResponse {
+  repeated Node nodes = 1;
+}
+
+message GetRequest {
+}
