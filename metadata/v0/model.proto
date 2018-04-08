@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/go.proto/metadata/v0;metadata";
+option go_package = "github.com/n0stack/go.proto/metadata/v0;pmetadata";
 
 package n0stack.metadata;
 

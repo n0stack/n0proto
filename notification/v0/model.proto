@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/go.proto/notification/v0;notification";
+option go_package = "github.com/n0stack/go.proto/notification/v0;pnotification";
 
 package n0stack.notification;
 

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/go.proto/kvm/v0;kvm";
+option go_package = "github.com/n0stack/go.proto/kvm/v0;pkvm";
 
 package n0stack.kvm;
 
@@ -36,7 +36,7 @@ message Spec {
   uint64 memoryBytes = 2;
 
   // Storage
-  repeated string volumeUrls = 3;
+  repeated string volumes = 3;
 
   // Network
   message NIC {

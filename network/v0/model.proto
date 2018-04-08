@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/go.proto/network/v0;network";
+option go_package = "github.com/n0stack/go.proto/network/v0;pnetwork";
 
 package n0stack.network;
 
