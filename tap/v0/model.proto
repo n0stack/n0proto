@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "github.com/n0stack/go.proto/tap/v0;ptap";
 
-package n0stack.tap.v0;
+package n0stack.tap;
 
 import "google/protobuf/empty.proto";
 

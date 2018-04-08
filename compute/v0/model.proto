@@ -51,20 +51,20 @@ message Spec {
 message Status {
   message VM {
     string id = 1;
-    n0stack.kvm.v0.Spec spec = 2;
+    n0stack.kvm.Spec spec = 2;
     string connection = 3;
   }
   VM vm = 1;
 
   message Volume {
     string id = 1;
-    n0stack.qcow2.v0.Spec spec = 2;
+    n0stack.qcow2.Spec spec = 2;
   }
   Volume volume = 2;
 
   message NIC {
     string id = 1;
-    n0stack.tap.v0.Spec spec = 2;
+    n0stack.tap.Spec spec = 2;
   }
   repeated NIC nics = 3;
 }
