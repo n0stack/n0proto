@@ -5,9 +5,16 @@ option go_package = "github.com/n0stack/go.proto/node/v0;pnode";
 package n0stack.node;
 
 service NodeService {
+  // clusterレベルのList
+  // すべてのノードから同じ結果が帰ってくる必要がある
   rpc List(ListRequest) returns (ListResponse) {}
 
+  // 自分のNodeオブジェクトを返す
+  // IDを指定できるようにしたほうが統一感があるかもしれない
   rpc Get(GetRequest) returns (Node) {}
+
+  // nodeが死んだことを動的に検知するためのエンドポイント (仮)
+  // rpc AliveActivity(AliveActivityRequest) returns (stream AliveActivityResponse) {}
 }
 
 message Node {
@@ -19,18 +26,21 @@ message Node {
 
 message Status {
   // Architectureは全部x64だろうという気持ち
-  uint32 cpus = 1;
+  uint32 vcpus = 1;
 
   // Memory
-  uint64 memoryBytes = 2;
+  uint64 memory_bytes = 2;
 
   // Storage
-  uint64 storageBytes = 3;
+  uint64 storage_bytes = 3;
 
   // Network
 }
 
 message ListRequest {
+  // paging
+  // int32 page_size = 1;
+  // string page_token = 2;
 }
 
 message ListResponse {
