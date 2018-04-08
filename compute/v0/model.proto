@@ -7,6 +7,9 @@ package n0stack.compute;
 import "google/protobuf/empty.proto";
 
 import "metadata/v0/model.proto";
+import "kvm/v0/model.proto";
+import "tap/v0/model.proto";
+import "qcow2/v0/model.proto";
 
 service ComputeService {
   rpc Get(GetRequest)   returns (Compute) {}
@@ -46,11 +49,24 @@ message Spec {
 }
 
 message Status {
-  string kvm = 1;
+  message VM {
+    string id = 1;
+    n0stack.kvm.v0.Spec spec = 2;
+    string connection = 3;
+  }
+  VM vm = 1;
 
-  string qcow2 = 2;
+  message Volume {
+    string id = 1;
+    n0stack.qcow2.v0.Spec spec = 2;
+  }
+  Volume volume = 2;
 
-  repeated string taps = 3;
+  message NIC {
+    string id = 1;
+    n0stack.tap.v0.Spec spec = 2;
+  }
+  repeated NIC nics = 3;
 }
 
 message GetRequest {
