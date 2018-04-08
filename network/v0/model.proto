@@ -29,12 +29,12 @@ message Spec {
     VLAN = 1;
   }
   NetworkType type = 1;
-  uint64 networkID = 2;
+  uint64 network_id = 2;
 
-  string ipv4Cidr = 3;
-  string ipv4Gateway = 4;
+  string ipv4_cidr = 3;
+  string ipv4_gateway = 4;
 
-  string nameServer = 5;
+  string name_server = 5;
   string domain = 6;
 }
 

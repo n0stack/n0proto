@@ -36,12 +36,12 @@ message Spec {
   uint32 vcpus = 2;
 
   // Memory
-  uint64 memoryBytes = 3;
+  uint64 memory_ytes = 3;
 
   // Volume
   message NIC {
     string network = 1;
-    repeated string ipAddrs = 2;
+    repeated string ipaddrs = 2;
   }
 }
 

@@ -27,7 +27,7 @@ message Spec {
   }
   NetworkType type = 1;
 
-  uint64 networkID = 2;
+  uint64 network_id = 2;
 }
 
 message Status {

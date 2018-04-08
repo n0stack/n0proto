@@ -33,7 +33,7 @@ message Spec {
   uint32 vcpus = 1;
 
   // Memory
-  uint64 memoryBytes = 2;
+  uint64 memory_bytes = 2;
 
   // Storage
   repeated string volumes = 3;
