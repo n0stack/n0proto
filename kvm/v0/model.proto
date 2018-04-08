@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/go.proto/kvm/v0;pkvm";
+option go_package = "github.com/n0stack/proto.go/kvm/v0;pkvm";
 
 package n0stack.kvm;
 

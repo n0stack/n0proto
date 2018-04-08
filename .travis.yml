@@ -1,0 +1,30 @@
+sudo: required
+
+branches:
+  only:
+    - master
+
+services:
+  - docker
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_1fc90f464345_key -iv $encrypted_1fc90f464345_iv -in id_ecdsa.enc -out ~/.ssh/id_ecdsa -d
+  - chmod 600 ~/.ssh/id_ecdsa
+  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - git config --global user.email "h-otter@outlook.jp"
+  - git config --global user.name "[BOT] proto CI"
+  - docker build -t n0stack/build-proto .
+
+script:
+  - git clone git@github.com:n0stack/proto.go.git
+  - docker run -it --rm -v $PWD:/src:ro -v $PWD/proto.go:/dst/github.com/n0stack/proto.go/ n0stack/build-proto --go_out=plugins=grpc:/dst
+
+after_success:
+  - cd proto.go
+  - git add --all
+  - git commit -m "Update for $TRAVIS_COMMIT on github.com/n0stack/proto with a travis job $TRAVIS_BUILD_ID"
+  - git push -f origin master
+
+notifications:
+  slack:
+    secure: oQ7kgdzAzkSsV8sGOFkZI1GASj175wS7EFf3coWCsqXnvQkl5F6C50zaAPqd1l080J8iGL6JqfaHHDzHOdgZDFkvGinXHmj4TrtHhXk7hIcJq3jQsjN7uYbB4caOgNMHXbXNnNTh+kchvaxILgCZV8iiqGiH/kTZxGcPQssS0YoJ0jGLrC7kZ62DwLZuqIU80i+e6mKdH3y5dgGtXHXrwSdlKQmwXnAxtOWLuPC8X71NELU+jeZmBxqLZ/FP1CXLes6eUYFxru194GpYWbcLEe+8Oyd9CTMBOP6B2C6QG6Dh7+9weg7mMdRMMGDaJUxs/wVyQd6FKkylH9LOo4Rm2kYViCyMzWiyV2nI5kJOhmE0d0JX4Vnr2iltxI684+S2yxXaL04L9szAswbU1Oj0Uns1SyMbW3+lzkQPnl8gW9z6HbOL3SRXnEDS0tOuHr/gr6L+h4YmBSKimYkBYTizez0RkLRSD92pJ02l7A7l1Kd+xPeRxIcAJPJYoPGKuPtCxG5EFHaJjonbVCai/jNSzq/81J+xwP0RaCHZA9HF6vFADMZavUyOz0coVCEvx0WZpHAUU/SIlXvzYppPoHIdoBN1tFqe2BbcS/dSGEyKOzA9Xr7VwXE0WR03lD7WcEIBLFeymocsXcqIrGTzWD0+ponJ2H7J7WacdZcV2v+WrN0=

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/go.proto/compute/v0;pcompute";
+option go_package = "github.com/n0stack/proto.go/compute/v0;pcompute";
 
 package n0stack.compute;
 
@@ -39,7 +39,7 @@ message Spec {
   uint32 vcpus = 2;
 
   // Memory
-  uint64 memory_ytes = 3;
+  uint64 memory_bytes = 3;
 
   // Volume
   message NIC {
