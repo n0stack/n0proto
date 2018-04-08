@@ -31,9 +31,8 @@ message Spec {
 }
 
 message Status {
-  string node = 1;
-  string tap = 2;
-  string bridge = 3;
+  string tap = 1;
+  string bridge = 2;
 }
 
 message GetRequest {

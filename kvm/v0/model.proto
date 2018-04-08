@@ -47,14 +47,15 @@ message Spec {
 }
 
 message Status {
-  string node = 1;
-
   enum RunLevel {
     SHUTDOWN = 0;
     RUNNING = 1;
     PAUSED = 2;
   }
-  RunLevel runLevel = 2;
+  RunLevel run_level = 1;
+
+  // TCP port of websocket vnc which is opened by qemu
+  int vnc_port = 2;
 }
 
 message GetRequest {

@@ -29,8 +29,7 @@ message Spec {
 }
 
 message Status {
-  string node = 1;
-  string url = 2;
+  string url = 1;
 }
 
 message GetRequest {
