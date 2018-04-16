@@ -29,11 +29,11 @@ message Compute {
 message Spec {
   // node
   // 実装予定
-  // message NodeSelector {
-  //   string id = 1;
-  //   map<string, string> labels = 2;
-  // }
-  // NodeSelector nodeSelector = 1;
+  message NodeSelector {
+    string id = 1;
+    // map<string, string> labels = 2;
+  }
+  NodeSelector nodeSelector = 1;
 
   // CPU
   uint32 vcpus = 2;
@@ -42,6 +42,9 @@ message Spec {
   uint64 memory_bytes = 3;
 
   // Volume
+  // volumeに統合するため削除予定
+  string volume_source_url = 4;
+
   message NIC {
     string network = 1;
     repeated string ipaddrs = 2;
@@ -49,24 +52,36 @@ message Spec {
 }
 
 message Status {
+  enum State {
+    // not scheduled
+    PENDING = 0;
+
+    // running vm
+    RUNNING = 1;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 2;
+  }
+  State state = 1;
+
   message VM {
     string id = 1;
     n0stack.kvm.Spec spec = 2;
     string connection = 3;
   }
-  VM vm = 1;
+  VM vm = 2;
 
   message Volume {
     string id = 1;
     n0stack.qcow2.Spec spec = 2;
   }
-  Volume volume = 2;
+  Volume volume = 3;
 
   message NIC {
     string id = 1;
     n0stack.tap.Spec spec = 2;
   }
-  repeated NIC nics = 3;
+  repeated NIC nics = 4;
 }
 
 message GetRequest {
