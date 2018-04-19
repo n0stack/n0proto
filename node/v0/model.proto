@@ -4,6 +4,8 @@ option go_package = "github.com/n0stack/proto.go/node/v0;pnode";
 
 package n0stack.node;
 
+import "metadata/v0/model.proto";
+
 service NodeService {
   // clusterレベルのList
   // すべてのノードから同じ結果が帰ってくる必要がある
@@ -21,20 +23,22 @@ message Node {
   // MotherBoardのUUIDを用いる
   string id = 1;
 
+  // n0core起動時のコマンドライン引数から取る
+  n0stack.metadata.Metadata metadata = 2;
+
+  Spec spec = 3;
   Status status = 4;
 }
 
+message Spec {
+  // enum State {
+  //   DRAIN = 1;
+  // }
+  // State state = 1;
+}
+
 message Status {
-  // Architectureは全部x64だろうという気持ち
-  uint32 vcpus = 1;
-
-  // Memory
-  uint64 memory_bytes = 2;
-
-  // Storage
-  uint64 storage_bytes = 3;
-
-  // Network
+  string connection = 1;
 }
 
 message ListRequest {

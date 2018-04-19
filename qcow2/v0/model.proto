@@ -21,11 +21,13 @@ message Qcow2 {
 }
 
 message Spec {
+  string node = 1;
+
   // サイズを指定する
-  uint64 bytes = 1;
+  uint64 bytes = 2;
 
   // URLからイメージファイルをダウンロードすることができる
-  string sourceUrl = 2;
+  string source_url = 3;
 }
 
 message Status {

@@ -29,21 +29,23 @@ message KVM {
 }
 
 message Spec {
+  string node = 1;
+
   // CPU
-  uint32 vcpus = 1;
+  uint32 vcpus = 2;
 
   // Memory
-  uint64 memory_bytes = 2;
+  uint64 memory_bytes = 3;
 
   // Storage
-  repeated string volumes = 3;
+  repeated string volumes = 4;
 
   // Network
   message NIC {
     string tap = 1;
     string hwaddr = 2;
   }
-  repeated NIC nics = 4;
+  repeated NIC nics = 5;
 }
 
 message Status {
@@ -55,7 +57,7 @@ message Status {
   RunLevel run_level = 1;
 
   // TCP port of websocket vnc which is opened by qemu
-  int vnc_port = 2;
+  uint32 vnc_port = 2;
 }
 
 message GetRequest {

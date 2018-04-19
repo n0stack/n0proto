@@ -21,13 +21,15 @@ message Tap {
 }
 
 message Spec {
+  string node = 1;
+
   enum NetworkType {
     FLAT = 0;
     VLAN = 1;
   }
-  NetworkType type = 1;
+  NetworkType type = 2;
 
-  uint64 network_id = 2;
+  uint64 network_id = 3;
 }
 
 message Status {
