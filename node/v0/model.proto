@@ -9,11 +9,13 @@ import "metadata/v0/model.proto";
 service NodeService {
   // clusterレベルのList
   // すべてのノードから同じ結果が帰ってくる必要がある
-  rpc List(ListRequest) returns (ListResponse) {}
+  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse) {}
 
-  // 自分のNodeオブジェクトを返す
-  // IDを指定できるようにしたほうが統一感があるかもしれない
-  rpc Get(GetRequest) returns (Node) {}
+  // 指定したIDのNodeオブジェクトをかえす
+  rpc GetNode(GetNodeRequest) returns (Node) {}
+
+  // node idを指定することでエンドポイントの接続情報を得る
+  rpc GetConnection(GetConnectionRequest) returns (Connection) {}
 
   // nodeが死んだことを動的に検知するためのエンドポイント (仮)
   // rpc AliveActivity(AliveActivityRequest) returns (stream AliveActivityResponse) {}
@@ -26,30 +28,42 @@ message Node {
   // n0core起動時のコマンドライン引数から取る
   n0stack.metadata.Metadata metadata = 2;
 
-  Spec spec = 3;
+  // Spec spec = 3;
   Status status = 4;
 }
 
-message Spec {
-  // enum State {
-  //   DRAIN = 1;
-  // }
-  // State state = 1;
-}
+// message Spec {
+//   // enum State {
+//   //   DRAIN = 1;
+//   // }
+//   // State state = 1;
+// }
 
 message Status {
-  string connection = 1;
+  Connection connection = 1;
 }
 
-message ListRequest {
+message ListNodesRequest {
   // paging
   // int32 page_size = 1;
   // string page_token = 2;
 }
 
-message ListResponse {
+message ListNodesResponse {
   repeated Node nodes = 1;
 }
 
-message GetRequest {
+message GetNodeRequest {
+  // idがからの場合は自分を返す
+  string id = 1;
+}
+
+message Connection {
+  string address = 1;
+  uint32 port = 2;
+}
+
+message GetConnectionRequest {
+  // nodeのIDを指定する
+  string node_id = 1;
 }
