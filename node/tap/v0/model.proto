@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/node/tap/v0;ptap";
+
+package n0stack.node.tap;
+
+import "google/protobuf/empty.proto";
+
+service TapService {
+  rpc GetTap(GetTapRequest) returns (Tap) {}
+
+  rpc ApplyTap(ApplyTapRequest) returns (Tap) {}
+
+  rpc DeleteTap(DeleteTapRequest) returns (google.protobuf.Empty) {}
+}
+
+message Tap {
+  string id = 1;
+  Spec spec = 2;
+  Status status = 3;
+
+  // 空の場合は自分であると認識する
+  string node_id = 4;
+}
+
+message Spec {
+  enum NetworkType {
+    FLAT = 0;
+    VLAN = 1;
+  }
+  NetworkType type = 1;
+
+  // FLATの場合は空を許可
+  uint64 network_id = 2;
+}
+
+message Status {
+  string tap = 1;
+  string bridge = 2;
+}
+
+message GetTapRequest {
+  string id = 1;
+  string node_id = 5;
+}
+
+message ApplyTapRequest {
+  string id = 1;
+  Spec spec = 2;
+  string node_id = 5;
+}
+
+message DeleteTapRequest {
+  string id = 1;
+  string node_id = 5;
+}
