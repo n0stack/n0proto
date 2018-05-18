@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/mail/v0;pmail";
+
+package n0stack.mail;
+
+import "google/protobuf/empty.proto";
+
+service MailAddressService {
+  rpc ListMailAddresses(ListMailAddressesRequest) returns (ListMailAddressesResponse) {}
+
+  // rpc GetMail(GetMailRequest) returns (Mail) {}
+
+  rpc ApplyMailAddress(ApplyMailAddressRequest) returns (Mail) {}
+
+  // rpc DeleteMail(DeleteMailRequest) returns (google.protobuf.Empty) {}
+
+  // rpc SearchMail(SearchMailRequest) returns (SearchMailResponse)
+}
+
+message MailAddress {
+  string address = 1;
+  repeated members = 2;
+}
+
+message ListMailAddressesRequest {
+}
+
+message ListMailAddressesResponse {
+  repeated MailAddress mail_addresses = 1;
+}
+
+message ApplyMailAddressRequest {
+  MailAddress mail_address = 1;
+}
