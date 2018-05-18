@@ -40,7 +40,7 @@ message Thread {
   repeated Mail mails = 1;
 }
 
-message ListMailRequest {
+message ListMailsRequest {
 }
 
 message ListMailsResponse {

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/mail/v0;pmail";
+
+package n0stack.mail;
+
+import "google/protobuf/empty.proto";
+
+service AliasService {
+  rpc ListAliases(ListAliasesRequest) returns (ListAliasesResponse) {}
+
+  // rpc GetMail(GetMailRequest) returns (Mail) {}
+
+  rpc ApplyAlias(ApplyAliasRequest) returns (Alias) {}
+
+  // rpc DeleteMail(DeleteMailRequest) returns (google.protobuf.Empty) {}
+
+  // rpc SearchMail(SearchMailRequest) returns (SearchMailResponse)
+}
+
+message Alias {
+  string address = 1;
+  repeated string members = 2;
+}
+
+message ListAliasesRequest {
+}
+
+message ListAliasesResponse {
+  repeated Alias aliases = 1;
+}
+
+message ApplyAliasRequest {
+  Alias alias = 1;
+}
