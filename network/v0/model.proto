@@ -9,11 +9,13 @@ import "google/protobuf/empty.proto";
 import "metadata/v0/model.proto";
 
 service NetworkService {
-  rpc Get(GetRequest)   returns (Network) {}
+  rpc ListNetworks(ListNetworkRequest)   returns (ListNetworkResponse) {}
 
-  rpc Apply(ApplyRequest) returns (Network) {}
+  rpc GetNetwork(GetNetworkRequest)   returns (Network) {}
 
-  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+  rpc ApplyNetwork(ApplyNetworkRequest) returns (Network) {}
+
+  rpc DeleteNetwork(DeleteNetworkRequest) returns (google.protobuf.Empty) {}
 }
 
 message Network {
@@ -24,33 +26,48 @@ message Network {
 }
 
 message Spec {
-  enum NetworkType {
-    FLAT = 0;
-    VLAN = 1;
-  }
-  NetworkType type = 1;
-  uint64 network_id = 2;
+  string ipv4_cidr = 1;
+  string ipv4_gateway = 2;
 
-  string ipv4_cidr = 3;
-  string ipv4_gateway = 4;
+  // string ipv6_cidr = 3;
+  // string ipv6_gateway = 4;
 
   string name_server = 5;
   string domain = 6;
 }
 
 message Status {
+  enum State {
+    // not scheduled
+    PENDING = 0;
+
+    AVAILABLE = 1;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    FAILED = 2;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 3;
+  }
+  State state = 1;
 }
 
-message GetRequest {
+message ListNetworkRequest {}
+
+message ListNetworkResponse{
+  repeated Network networks = 1;
+}
+
+message GetNetworkRequest {
   string id = 1;
 }
 
-message ApplyRequest {
+message ApplyNetworkRequest {
   string id = 1;
   n0stack.metadata.Metadata metadata = 2;
   Spec spec = 3;
 }
 
-message DeleteRequest {
+message DeleteNetworkRequest {
   string id = 1;
 }

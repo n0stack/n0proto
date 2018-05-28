@@ -6,5 +6,6 @@ package n0stack.metadata;
 
 message Metadata {
   string name = 1;
-  map<string, string> labels = 2;
+  map<string, string> annotations = 2;
+  map<string, string> labels = 3;
 }

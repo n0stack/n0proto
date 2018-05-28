@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/compute/v0;pcompute";
+
+package n0stack.compute;
+
+import "google/protobuf/empty.proto";
+
+import "metadata/v0/model.proto";
+
+service ImageService {
+  rpc ListImages(ListImagesRequest) returns (ListImagesResponse) {}
+
+  rpc GetImage(GetImageRequest) returns (Image) {}
+
+  rpc ApplyImage(ApplyImageRequest) returns (Image) {}
+
+  rpc DeleteImage(DeleteImageRequest) returns (google.protobuf.Empty) {}
+  
+  // rpc RebuildImage(RebuildImageRequest) returns (Image) {}
+
+  // rpc Download(DownloadRequest) returns (stream DownloadResponse) {}
+}
+
+message Image {
+  string id = 1;
+  n0stack.metadata.Metadata metadata = 2;
+  Spec spec = 3;
+  Status status = 4;
+}
+
+message Spec {
+  // enum BuildType {
+  //   PACKER = 0;
+  //   // DOWNLOAD
+  //   // SNAPSHOT
+  // }
+  // Kind kind = 2;
+}
+
+message Status {
+  map<string, string> revisions = 1;
+}
+
+message ListImagesRequest {}
+
+message ListImagesResponse {
+  repeated Image images = 1;
+}
+
+message GetImageRequest {
+  string id = 1;
+}
+
+message ApplyImageRequest {
+  string id = 1;
+  n0stack.metadata.Metadata metadata = 2;
+  Spec spec = 3;
+}
+
+message DeleteImageRequest {
+  string id = 1;
+}
+
+// message RebuildImageRequest {
+//   string id = 1;
+// }
+
+// message DownloadRequest {
+//   string id = 1;
+//   string revision = 2;
+// }
+
+// message DownloadResponse {
+//   bytes asset = 1;
+// }

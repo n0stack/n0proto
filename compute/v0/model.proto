@@ -7,16 +7,15 @@ package n0stack.compute;
 import "google/protobuf/empty.proto";
 
 import "metadata/v0/model.proto";
-import "kvm/v0/model.proto";
-import "tap/v0/model.proto";
-import "qcow2/v0/model.proto";
 
 service ComputeService {
-  rpc Get(GetRequest)   returns (Compute) {}
+  rpc ListComputes(ListComputesRequest)   returns (ListComputesResponse) {}
 
-  rpc Apply(ApplyRequest) returns (Compute) {}
+  rpc GetCompute(GetComputeRequest)   returns (Compute) {}
 
-  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+  rpc ApplyCompute(ApplyComputeRequest) returns (Compute) {}
+
+  rpc DeleteCompute(DeleteComputeRequest) returns (google.protobuf.Empty) {}
 }
 
 message Compute {
@@ -27,28 +26,33 @@ message Compute {
 }
 
 message Spec {
-  // node
-  // 実装予定
-  message NodeSelector {
-    string id = 1;
-    // map<string, string> labels = 2;
-  }
-  NodeSelector nodeSelector = 1;
-
   // CPU
-  uint32 vcpus = 2;
+  uint32 vcpus = 1;
 
   // Memory
-  uint64 memory_bytes = 3;
+  uint64 memory_bytes = 2;
 
   // Volume
-  // volumeに統合するため削除予定
-  string volume_source_url = 4;
+  repeated string volume_ids = 3;
 
+  // Network
+  // エンドポイントを分けたほうがいいと思うが、実装する内容もないし、ユーザーのリクエストが煩雑になるので保留
+  // ただし、DHCPなどのためやNICの順番が入れ替わったりするときのためにmetadataやidはあったほうが便利だと考える
   message NIC {
-    string network = 1;
-    repeated string ipaddrs = 2;
+    string id = 1;
+    n0stack.metadata.Metadata metadata = 2;
+
+    message Spec {
+      string network_id = 1;
+
+      // 重複するかは確認しない
+      // かわりに空を許可して、DHCPで自動割り当てを可能にする
+      // TODO: 割り当てられたIPをどうやって確認するか
+      repeated string ipaddrs = 2;
+    }
+    Spec spec = 3;
   }
+  repeated NIC nics = 4;
 }
 
 message Status {
@@ -60,40 +64,30 @@ message Status {
     RUNNING = 1;
 
     // unknown state because failed to connect for scheduled node after RUNNING.
-    UNKNOWN = 2;
+    FAILED = 2;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 3;
   }
   State state = 1;
-
-  message VM {
-    string id = 1;
-    n0stack.kvm.Spec spec = 2;
-    string connection = 3;
-  }
-  VM vm = 2;
-
-  message Volume {
-    string id = 1;
-    n0stack.qcow2.Spec spec = 2;
-  }
-  Volume volume = 3;
-
-  message NIC {
-    string id = 1;
-    n0stack.tap.Spec spec = 2;
-  }
-  repeated NIC nics = 4;
 }
 
-message GetRequest {
+message ListComputesRequest {}
+
+message ListComputesResponse {
+  repeated Compute computes = 1;
+}
+
+message GetComputeRequest {
   string id = 1;
 }
 
-message ApplyRequest {
+message ApplyComputeRequest {
   string id = 1;
   n0stack.metadata.Metadata metadata = 2;
   Spec spec = 3;
 }
 
-message DeleteRequest {
+message DeleteComputeRequest {
   string id = 1;
 }
