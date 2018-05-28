@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto.go/network/v0;pnetwork";
+option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 
-package n0stack.network;
+package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
-import "metadata/v0/model.proto";
+import "v0/metadata.proto";
 
 service NetworkService {
   rpc ListNetworks(ListNetworkRequest)   returns (ListNetworkResponse) {}
@@ -20,12 +20,12 @@ service NetworkService {
 
 message Network {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
-  Status status = 4;
+  n0stack.Metadata metadata = 2;
+  NetworkSpec spec = 3;
+  NetworkStatus status = 4;
 }
 
-message Spec {
+message NetworkSpec {
   string ipv4_cidr = 1;
   string ipv4_gateway = 2;
 
@@ -36,8 +36,8 @@ message Spec {
   string domain = 6;
 }
 
-message Status {
-  enum State {
+message NetworkStatus {
+  enum NetworkState {
     // not scheduled
     PENDING = 0;
 
@@ -49,7 +49,7 @@ message Status {
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 3;
   }
-  State state = 1;
+  NetworkState state = 1;
 }
 
 message ListNetworkRequest {}
@@ -64,8 +64,8 @@ message GetNetworkRequest {
 
 message ApplyNetworkRequest {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
+  n0stack.Metadata metadata = 2;
+  NetworkSpec spec = 3;
 }
 
 message DeleteNetworkRequest {

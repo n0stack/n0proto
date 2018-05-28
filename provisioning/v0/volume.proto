@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto.go/volume/v0;pvolume";
+option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 
-package n0stack.volume;
+package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
-import "metadata/v0/model.proto";
+import "v0/metadata.proto";
 
 service VolumeService {
   rpc ListVolumes(ListVolumesRequest) returns (ListVolumesResponse) {}
@@ -20,17 +20,17 @@ service VolumeService {
 
 message Volume {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
-  Status status = 4;
+  n0stack.Metadata metadata = 2;
+  VolumeSpec spec = 3;
+  VolumeStatus status = 4;
 }
 
-message Spec {
+message VolumeSpec {
   uint64 bytes = 1;
 }
 
-message Status {
-  enum State {
+message VolumeStatus {
+  enum VolumeState {
     // not scheduled
     PENDING = 0;
 
@@ -42,7 +42,7 @@ message Status {
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 3;
   }
-  State state = 1;
+  VolumeState state = 1;
 }
 
 message ListVolumesRequest {}
@@ -65,8 +65,8 @@ message GetVolumeRequest {
 
 message ApplyVolumeRequest {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
+  n0stack.Metadata metadata = 2;
+  VolumeSpec spec = 3;
 }
 
 message DeleteVolumeRequest {

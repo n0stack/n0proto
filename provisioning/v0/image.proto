@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto.go/compute/v0;pcompute";
+option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 
-package n0stack.compute;
+package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
-import "metadata/v0/model.proto";
+import "v0/metadata.proto";
 
 service ImageService {
   rpc ListImages(ListImagesRequest) returns (ListImagesResponse) {}
@@ -24,12 +24,13 @@ service ImageService {
 
 message Image {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
-  Status status = 4;
+  n0stack.Metadata metadata = 2;
+  ImageSpec spec = 3;
+  ImageStatus status = 4;
 }
 
-message Spec {
+// 途中
+message ImageSpec {
   // enum BuildType {
   //   PACKER = 0;
   //   // DOWNLOAD
@@ -38,7 +39,7 @@ message Spec {
   // Kind kind = 2;
 }
 
-message Status {
+message ImageStatus {
   map<string, string> revisions = 1;
 }
 
@@ -54,8 +55,8 @@ message GetImageRequest {
 
 message ApplyImageRequest {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
+  n0stack.Metadata metadata = 2;
+  ImageSpec spec = 3;
 }
 
 message DeleteImageRequest {

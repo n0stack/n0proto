@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto.go/compute/v0;pcompute";
+option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 
-package n0stack.compute;
+package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
-import "metadata/v0/model.proto";
+import "v0/metadata.proto";
 
 service ComputeService {
   rpc ListComputes(ListComputesRequest)   returns (ListComputesResponse) {}
@@ -20,12 +20,12 @@ service ComputeService {
 
 message Compute {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
-  Status status = 4;
+  n0stack.Metadata metadata = 2;
+  ComputeSpec spec = 3;
+  ComputeStatus status = 4;
 }
 
-message Spec {
+message ComputeSpec {
   // CPU
   uint32 vcpus = 1;
 
@@ -40,7 +40,7 @@ message Spec {
   // ただし、DHCPなどのためやNICの順番が入れ替わったりするときのためにmetadataやidはあったほうが便利だと考える
   message NIC {
     string id = 1;
-    n0stack.metadata.Metadata metadata = 2;
+    n0stack.Metadata metadata = 2;
 
     message Spec {
       string network_id = 1;
@@ -55,8 +55,8 @@ message Spec {
   repeated NIC nics = 4;
 }
 
-message Status {
-  enum State {
+message ComputeStatus {
+  enum ComputeState {
     // not scheduled
     PENDING = 0;
 
@@ -69,7 +69,7 @@ message Status {
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 3;
   }
-  State state = 1;
+  ComputeState state = 1;
 }
 
 message ListComputesRequest {}
@@ -84,8 +84,8 @@ message GetComputeRequest {
 
 message ApplyComputeRequest {
   string id = 1;
-  n0stack.metadata.Metadata metadata = 2;
-  Spec spec = 3;
+  n0stack.Metadata metadata = 2;
+  ComputeSpec spec = 3;
 }
 
 message DeleteComputeRequest {

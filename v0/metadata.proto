@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto.go/metadata/v0;pmetadata";
+option go_package = "github.com/n0stack/proto.go/v0;pn0stack";
 
-package n0stack.metadata;
+package n0stack;
 
 message Metadata {
   string name = 1;
