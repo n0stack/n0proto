@@ -16,6 +16,8 @@ service VolumeService {
   rpc ApplyVolume(ApplyVolumeRequest) returns (Volume) {}
 
   rpc DeleteVolume(DeleteVolumeRequest) returns (google.protobuf.Empty) {}
+
+  rpc WatchVolumes(WatchVolumesRequest) returns (stream WatchVolumesResponse) {}
 }
 
 message Volume {
@@ -71,4 +73,15 @@ message ApplyVolumeRequest {
 
 message DeleteVolumeRequest {
   string id = 1;
+}
+
+message WatchVolumesRequest {}
+
+message WatchVolumesResponse {
+  enum VolumeEvents {
+    APPLY = 0;
+    DELETE = 1;
+  }
+  VolumeEvents event = 1;
+  Volume volume = 2;
 }

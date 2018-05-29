@@ -9,13 +9,15 @@ import "google/protobuf/empty.proto";
 import "v0/metadata.proto";
 
 service ComputeService {
-  rpc ListComputes(ListComputesRequest)   returns (ListComputesResponse) {}
+  rpc ListComputes(ListComputesRequest) returns (ListComputesResponse) {}
 
-  rpc GetCompute(GetComputeRequest)   returns (Compute) {}
+  rpc GetCompute(GetComputeRequest) returns (Compute) {}
 
   rpc ApplyCompute(ApplyComputeRequest) returns (Compute) {}
 
   rpc DeleteCompute(DeleteComputeRequest) returns (google.protobuf.Empty) {}
+
+  rpc WatchCompute(WatchComputesRequest) returns (stream WatchComputesResponse) {}
 }
 
 message Compute {
@@ -37,7 +39,7 @@ message ComputeSpec {
 
   // Network
   // エンドポイントを分けたほうがいいと思うが、実装する内容もないし、ユーザーのリクエストが煩雑になるので保留
-  // ただし、DHCPなどのためやNICの順番が入れ替わったりするときのためにmetadataやidはあったほうが便利だと考える
+  // ただし、DHCPなどのためやNICの順番が入れ替わったりするときのためにmetadataやidはあったほうが便利だと考えている
   message NIC {
     string id = 1;
     n0stack.Metadata metadata = 2;
@@ -90,4 +92,15 @@ message ApplyComputeRequest {
 
 message DeleteComputeRequest {
   string id = 1;
+}
+
+message WatchComputesRequest {}
+
+message WatchComputesResponse{
+  enum ComputeEvents {
+    APPLY = 0;
+    DELETE = 1;
+  }
+  ComputeEvents event = 1;
+  Compute compute = 2;
 }

@@ -9,13 +9,15 @@ import "google/protobuf/empty.proto";
 import "v0/metadata.proto";
 
 service NetworkService {
-  rpc ListNetworks(ListNetworkRequest)   returns (ListNetworkResponse) {}
+  rpc ListNetworks(ListNetworkRequest) returns (ListNetworkResponse) {}
 
-  rpc GetNetwork(GetNetworkRequest)   returns (Network) {}
+  rpc GetNetwork(GetNetworkRequest) returns (Network) {}
 
   rpc ApplyNetwork(ApplyNetworkRequest) returns (Network) {}
 
   rpc DeleteNetwork(DeleteNetworkRequest) returns (google.protobuf.Empty) {}
+
+  rpc WatchNetworks(WatchNetworksRequest) returns (stream WatchNetworksResponse) {}
 }
 
 message Network {
@@ -70,4 +72,15 @@ message ApplyNetworkRequest {
 
 message DeleteNetworkRequest {
   string id = 1;
+}
+
+message WatchNetworksRequest {}
+
+message WatchNetworksResponse {
+  enum NetworkEvents {
+    APPLY = 0;
+    DELETE = 1;
+  }
+  NetworkEvents event = 1;
+  Network network = 2;
 }
