@@ -21,10 +21,9 @@ service ComputeService {
 }
 
 message Compute {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  ComputeSpec spec = 3;
-  ComputeStatus status = 4;
+  n0stack.Metadata metadata = 1;
+  ComputeSpec spec = 2;
+  ComputeStatus status = 3;
 }
 
 message ComputeSpec {
@@ -41,8 +40,7 @@ message ComputeSpec {
   // エンドポイントを分けたほうがいいと思うが、実装する内容もないし、ユーザーのリクエストが煩雑になるので保留
   // ただし、DHCPなどのためやNICの順番が入れ替わったりするときのためにmetadataやidはあったほうが便利だと考えている
   message NIC {
-    string id = 1;
-    n0stack.Metadata metadata = 2;
+    n0stack.Metadata metadata = 1;
 
     message Spec {
       string network_id = 1;
@@ -52,7 +50,7 @@ message ComputeSpec {
       // TODO: 割り当てられたIPをどうやって確認するか
       repeated string ipaddrs = 2;
     }
-    Spec spec = 3;
+    Spec spec = 2;
   }
   repeated NIC nics = 4;
 }
@@ -81,17 +79,16 @@ message ListComputesResponse {
 }
 
 message GetComputeRequest {
-  string id = 1;
+  string name = 1;
 }
 
 message ApplyComputeRequest {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  ComputeSpec spec = 3;
+  n0stack.Metadata metadata = 1;
+  ComputeSpec spec = 2;
 }
 
 message DeleteComputeRequest {
-  string id = 1;
+  string name = 1;
 }
 
 message WatchComputesRequest {}

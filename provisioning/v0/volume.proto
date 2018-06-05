@@ -21,10 +21,9 @@ service VolumeService {
 }
 
 message Volume {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  VolumeSpec spec = 3;
-  VolumeStatus status = 4;
+  n0stack.Metadata metadata = 1;
+  VolumeSpec spec = 2;
+  VolumeStatus status = 3;
 }
 
 message VolumeSpec {
@@ -54,25 +53,23 @@ message ListVolumesResponse {
 }
 
 message GetVolumeRequest {
-  string id = 1;
+  string name = 1;
 }
 
 // message CreateVolumeRequest {
-//   string id = 1;
-//   n0stack.metadata.Metadata metadata = 2;
-//   Spec spec = 3;
+//   n0stack.metadata.Metadata metadata = 1;
+//   Spec spec = 2;
 
-//   string image_id = 5;
+//   string image_id = 4;
 // }
 
 message ApplyVolumeRequest {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  VolumeSpec spec = 3;
+  n0stack.Metadata metadata = 1;
+  VolumeSpec spec = 2;
 }
 
 message DeleteVolumeRequest {
-  string id = 1;
+  string name = 1;
 }
 
 message WatchVolumesRequest {}

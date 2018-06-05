@@ -23,10 +23,9 @@ service ImageService {
 }
 
 message Image {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  ImageSpec spec = 3;
-  ImageStatus status = 4;
+  n0stack.Metadata metadata = 1;
+  ImageSpec spec = 2;
+  ImageStatus status = 3;
 }
 
 // 途中
@@ -50,17 +49,16 @@ message ListImagesResponse {
 }
 
 message GetImageRequest {
-  string id = 1;
+  string name = 1;
 }
 
 message ApplyImageRequest {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  ImageSpec spec = 3;
+  n0stack.Metadata metadata = 1;
+  ImageSpec spec = 2;
 }
 
 message DeleteImageRequest {
-  string id = 1;
+  string name = 1;
 }
 
 // message RebuildImageRequest {

@@ -21,10 +21,9 @@ service NetworkService {
 }
 
 message Network {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  NetworkSpec spec = 3;
-  NetworkStatus status = 4;
+  n0stack.Metadata metadata = 1;
+  NetworkSpec spec = 2;
+  NetworkStatus status = 3;
 }
 
 message NetworkSpec {
@@ -61,17 +60,16 @@ message ListNetworkResponse{
 }
 
 message GetNetworkRequest {
-  string id = 1;
+  string name = 1;
 }
 
 message ApplyNetworkRequest {
-  string id = 1;
-  n0stack.Metadata metadata = 2;
-  NetworkSpec spec = 3;
+  n0stack.Metadata metadata = 1;
+  NetworkSpec spec = 2;
 }
 
 message DeleteNetworkRequest {
-  string id = 1;
+  string name = 1;
 }
 
 message WatchNetworksRequest {}

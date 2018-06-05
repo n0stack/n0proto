@@ -5,7 +5,13 @@ option go_package = "github.com/n0stack/proto.go/v0;pn0stack";
 package n0stack;
 
 message Metadata {
+  // Make unique!!
   string name = 1;
   map<string, string> annotations = 2;
   map<string, string> labels = 3;
+
+  // Version is used for optimistic lock.
+  // Start from 0.
+  // Getした値とApplyする値が一致した場合、受け入れられる
+  int64 version = 4;
 }
