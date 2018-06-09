@@ -30,12 +30,12 @@ message Node {
 message NodeSpec {
   string address = 1;
 
+  // Map of port and service description
   message Endpoint {
     string service = 1;
-    uint32 port = 2;
-    string version = 3;
+    string version = 2;
   }
-  repeated Endpoint endpoints = 2;
+  map<uint32, Endpoint> endpoints = 2;
 
   string ipmi_address = 3;
   string serial = 4;

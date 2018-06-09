@@ -34,7 +34,7 @@ message ComputeSpec {
   uint64 memory_bytes = 2;
 
   // Volume
-  repeated string volume_ids = 3;
+  repeated string volume_names = 3;
 
   // Network
   // エンドポイントを分けたほうがいいと思うが、実装する内容もないし、ユーザーのリクエストが煩雑になるので保留
@@ -43,7 +43,7 @@ message ComputeSpec {
     n0stack.Metadata metadata = 1;
 
     message Spec {
-      string network_id = 1;
+      string network_name = 1;
 
       // 重複するかは確認しない
       // かわりに空を許可して、DHCPで自動割り当てを可能にする
