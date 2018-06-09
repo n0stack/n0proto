@@ -43,8 +43,8 @@ message NodeSpec {
 
 message NodeStatus {
   enum NodeState {
-    Ready = 0;
-    NotReady = 1;
+    NotReady = 0;
+    Ready = 1;
   }
   NodeState state = 1;
 }
