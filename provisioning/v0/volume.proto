@@ -6,6 +6,7 @@ package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
+import "v0/component.proto";
 import "v0/metadata.proto";
 
 service VolumeService {
@@ -16,14 +17,13 @@ service VolumeService {
   rpc ApplyVolume(ApplyVolumeRequest) returns (Volume) {}
 
   rpc DeleteVolume(DeleteVolumeRequest) returns (google.protobuf.Empty) {}
-
-  rpc WatchVolumes(WatchVolumesRequest) returns (stream WatchVolumesResponse) {}
 }
 
 message Volume {
   n0stack.Metadata metadata = 1;
   VolumeSpec spec = 2;
   VolumeStatus status = 3;
+  repeated n0stack.Component components = 4;
 }
 
 message VolumeSpec {
@@ -56,13 +56,6 @@ message GetVolumeRequest {
   string name = 1;
 }
 
-// message CreateVolumeRequest {
-//   n0stack.metadata.Metadata metadata = 1;
-//   Spec spec = 2;
-
-//   string image_id = 4;
-// }
-
 message ApplyVolumeRequest {
   n0stack.Metadata metadata = 1;
   VolumeSpec spec = 2;
@@ -70,15 +63,4 @@ message ApplyVolumeRequest {
 
 message DeleteVolumeRequest {
   string name = 1;
-}
-
-message WatchVolumesRequest {}
-
-message WatchVolumesResponse {
-  enum VolumeEvents {
-    APPLY = 0;
-    DELETE = 1;
-  }
-  VolumeEvents event = 1;
-  Volume volume = 2;
 }
