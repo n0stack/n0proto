@@ -6,6 +6,7 @@ package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
+import "v0/component.proto";
 import "v0/metadata.proto";
 
 service NetworkService {
@@ -24,14 +25,15 @@ message Network {
   n0stack.Metadata metadata = 1;
   NetworkSpec spec = 2;
   NetworkStatus status = 3;
+  repeated n0stack.Component components = 4;  
 }
 
 message NetworkSpec {
   string ipv4_cidr = 1;
   string ipv4_gateway = 2;
 
-  // string ipv6_cidr = 3;
-  // string ipv6_gateway = 4;
+  string ipv6_cidr = 3;
+  string ipv6_gateway = 4;
 
   string name_server = 5;
   string domain = 6;
