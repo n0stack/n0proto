@@ -9,7 +9,7 @@ import "google/protobuf/empty.proto";
 import "v0/metadata.proto";
 
 service NetworkService {
-  rpc ListNetworks(ListNetworkRequest) returns (ListNetworkResponse) {}
+  rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse) {}
 
   rpc GetNetwork(GetNetworkRequest) returns (Network) {}
 
@@ -53,9 +53,9 @@ message NetworkStatus {
   NetworkState state = 1;
 }
 
-message ListNetworkRequest {}
+message ListNetworksRequest {}
 
-message ListNetworkResponse{
+message ListNetworksResponse{
   repeated Network networks = 1;
 }
 
