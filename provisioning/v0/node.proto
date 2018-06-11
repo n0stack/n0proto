@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 
-package n0stack.node;
+package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
