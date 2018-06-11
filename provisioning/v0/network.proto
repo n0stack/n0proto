@@ -46,7 +46,7 @@ message NetworkStatus {
 
     AVAILABLE = 3;
 
-    // unknown state because failed to connect for scheduled node after RUNNING.
+    // falied state because failed some process on API.
     FAILED = 1;
 
     // unknown state because failed to connect for scheduled node after RUNNING.

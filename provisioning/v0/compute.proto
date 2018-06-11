@@ -6,6 +6,7 @@ package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
 
+import "v0/component.proto";
 import "v0/metadata.proto";
 
 service ComputeService {
@@ -24,6 +25,7 @@ message Compute {
   n0stack.Metadata metadata = 1;
   ComputeSpec spec = 2;
   ComputeStatus status = 3;
+  repeated n0stack.Component components = 4;
 }
 
 message ComputeSpec {
@@ -34,25 +36,21 @@ message ComputeSpec {
   uint64 memory_bytes = 2;
 
   // Volume
-  repeated string volume_names = 3;
+  // definition: (label, volume_name)
+  map<string, string> volumes = 3;
 
   // Network
-  // エンドポイントを分けたほうがいいと思うが、実装する内容もないし、ユーザーのリクエストが煩雑になるので保留
-  // ただし、DHCPなどのためやNICの順番が入れ替わったりするときのためにmetadataやidはあったほうが便利だと考えている
+  // definition: (label, NIC)
   message NIC {
-    n0stack.Metadata metadata = 1;
+    string network_name = 1;
 
-    message Spec {
-      string network_name = 1;
+    string hardware_address = 2;
 
-      // 重複するかは確認しない
-      // かわりに空を許可して、DHCPで自動割り当てを可能にする
-      // TODO: 割り当てられたIPをどうやって確認するか
-      repeated string ipaddrs = 2;
-    }
-    Spec spec = 2;
+    // 重複するかは確認しない
+    // かわりに空を許可して、DHCPで自動割り当てを可能にする
+    repeated string ip_addresses = 3;
   }
-  repeated NIC nics = 4;
+  map<string, NIC> nics = 4;
 }
 
 message ComputeStatus {
@@ -61,13 +59,15 @@ message ComputeStatus {
     PENDING = 0;
 
     // running vm
-    RUNNING = 1;
+    RUNNING = 3;
+    SHUTDOWN = 4;
+    PAUSED = 5;
+
+    // falied state because failed some process on API.
+    FAILED = 1;
 
     // unknown state because failed to connect for scheduled node after RUNNING.
-    FAILED = 2;
-
-    // unknown state because failed to connect for scheduled node after RUNNING.
-    UNKNOWN = 3;
+    UNKNOWN = 2;
   }
   ComputeState state = 1;
 }
@@ -93,11 +93,4 @@ message DeleteComputeRequest {
 
 message WatchComputesRequest {}
 
-message WatchComputesResponse{
-  enum ComputeEvents {
-    APPLY = 0;
-    DELETE = 1;
-  }
-  ComputeEvents event = 1;
-  Compute compute = 2;
-}
+message WatchComputesResponse{}
