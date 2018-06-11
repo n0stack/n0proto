@@ -44,13 +44,13 @@ message NetworkStatus {
     // not scheduled
     PENDING = 0;
 
-    AVAILABLE = 1;
+    AVAILABLE = 3;
 
     // unknown state because failed to connect for scheduled node after RUNNING.
-    FAILED = 2;
+    FAILED = 1;
 
     // unknown state because failed to connect for scheduled node after RUNNING.
-    UNKNOWN = 3;
+    UNKNOWN = 2;
   }
   NetworkState state = 1;
 }
