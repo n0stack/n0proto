@@ -19,6 +19,25 @@ service ComputeService {
   rpc DeleteCompute(DeleteComputeRequest) returns (google.protobuf.Empty) {}
 
   rpc WatchCompute(WatchComputesRequest) returns (stream WatchComputesResponse) {}
+
+  // VM actions
+  // -> RUNNING
+  rpc Boot(ActionComputeRequest)         returns (Compute) {}
+
+  // RUNNING -> RUNNING
+  rpc Reboot(ActionComputeRequest)       returns (Compute) {}
+
+  // RUNNING -> RUNNING
+  rpc HardReboot(ActionComputeRequest)   returns (Compute) {}
+
+  // RUNNING -> SHUTDOWN
+  rpc Shutdown(ActionComputeRequest)     returns (Compute) {}
+
+  // RUNNING -> SHUTDOWN
+  rpc HardShutdown(ActionComputeRequest) returns (Compute) {}
+
+  // RUNNING -> PAUSED
+  rpc Save(ActionComputeRequest)         returns (Compute) {}
 }
 
 message Compute {
@@ -46,8 +65,6 @@ message ComputeSpec {
 
     string hardware_address = 2;
 
-    // 重複するかは確認しない
-    // かわりに空を許可して、DHCPで自動割り当てを可能にする
     repeated string ip_addresses = 3;
   }
   map<string, NIC> nics = 4;
@@ -94,3 +111,7 @@ message DeleteComputeRequest {
 message WatchComputesRequest {}
 
 message WatchComputesResponse{}
+
+message ActionComputeRequest {
+  string name = 1;
+}
