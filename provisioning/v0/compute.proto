@@ -52,11 +52,16 @@ message ComputeSpec {
   uint32 vcpus = 1;
 
   // Memory
+  // request_memory_bytes
+  // limit_memory_bytes
   uint64 memory_bytes = 2;
 
   // Volume
   // definition: (label, volume_name)
-  map<string, string> volumes = 3;
+  message Volume {
+    string volume_name = 1;
+  }
+  map<string, Volume> volumes = 3;
 
   // Network
   // definition: (label, NIC)
@@ -87,6 +92,8 @@ message ComputeStatus {
     UNKNOWN = 2;
   }
   ComputeState state = 1;
+
+  // allocated_memory_bytes  
 }
 
 message ListComputesRequest {}
