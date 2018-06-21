@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/deployment/v0;pdeployment";
+
+package n0stack.deployment;
+
+import "google/protobuf/empty.proto";
+
+import "v0/component.proto";
+import "v0/metadata.proto";
+import "provisioning/v0/compute.proto";
+import "provisioning/v0/image.proto";
+import "provisioning/v0/network.proto";
+import "provisioning/v0/volume.proto";
+
+service ScaleService {
+  rpc ListScales(ListScalesRequest) returns (ListScalesResponse) {}
+
+  rpc GetScale(GetScaleRequest) returns (Scale) {}
+
+  rpc StartScale(StartScaleRequest) returns (Scale) {}
+
+  rpc DeleteScale(DeleteScaleRequest) returns (google.protobuf.Empty) {}
+
+  // rpc WatchScales(WatchScalesRequest) returns (stream WatchScalesResponse) {}
+}
+
+message Scale {
+  n0stack.Metadata metadata = 1;
+  ScaleSpec spec = 2;
+  ScaleStatus status = 3;
+  repeated n0stack.Component components = 4;  
+}
+
+message ScaleSpec {
+  uint32 replicas = 1;
+
+  message Template {
+    // ココらへん怪しい :thinking_face:
+    // imageをrepeatedにするか、冗長ではないかなど
+    n0stack.provisioning.Compute compute = 1;
+    n0stack.provisioning.Image image = 2;
+    repeated n0stack.provisioning.Volume volumes = 3;
+  }
+  repeated Template templates = 2;
+
+  n0stack.provisioning.Network network = 3;
+}
+
+message ScaleStatus {
+  enum ScaleState {
+    // not scheduled
+    PENDING = 0;
+
+    RUNNING = 3;
+
+    // falied state because failed some process on API.
+    FAILED = 1;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 2;
+  }
+  ScaleState state = 1;
+}
+
+message ListScalesRequest {}
+
+message ListScalesResponse{
+  repeated Scale scales = 1;
+}
+
+message GetScaleRequest {
+  string name = 1;
+}
+
+message StartScaleRequest {
+  n0stack.Metadata metadata = 1;
+  ScaleSpec spec = 2;
+}
+
+message DeleteScaleRequest {
+  string name = 1;
+}
+
+// message WatchScalesRequest {}
+
+// message WatchScalesResponse {
+//   enum ScaleEvents {
+//     APPLY = 0;
+//     DELETE = 1;
+//   }
+//   ScaleEvents event = 1;
+//   Scale network = 2;
+// }
