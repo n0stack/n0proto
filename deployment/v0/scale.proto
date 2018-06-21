@@ -8,10 +8,6 @@ import "google/protobuf/empty.proto";
 
 import "v0/component.proto";
 import "v0/metadata.proto";
-import "provisioning/v0/compute.proto";
-import "provisioning/v0/image.proto";
-import "provisioning/v0/network.proto";
-import "provisioning/v0/volume.proto";
 
 service ScaleService {
   rpc ListScales(ListScalesRequest) returns (ListScalesResponse) {}
@@ -36,15 +32,23 @@ message ScaleSpec {
   uint32 replicas = 1;
 
   message Template {
-    // ココらへん怪しい :thinking_face:
-    // imageをrepeatedにするか、冗長ではないかなど
-    n0stack.provisioning.Compute compute = 1;
-    n0stack.provisioning.Image image = 2;
-    repeated n0stack.provisioning.Volume volumes = 3;
-  }
-  repeated Template templates = 2;
+    n0stack.Metadata metadata = 1;
 
-  n0stack.provisioning.Network network = 3;
+    uint32 vcpus = 2;
+    string cpu_request = 3;
+    // string cpu_limit = 4;
+
+    uint64 memory_bytes_request = 5;
+    uint64 memory_bytes_limit = 6;
+
+    uint64 volume_bytes = 7;
+    string image_name = 9;
+    string image_revision_tag = 10;
+    string image_revision_hash = 11;
+
+    repeated string network_names = 8;
+  }
+  Template template = 2;
 }
 
 message ScaleStatus {
