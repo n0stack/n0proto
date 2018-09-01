@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/deployment/v0;pdeployment";
+
+package n0stack.deployment;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+import "v0/component.proto";
+import "v0/metadata.proto";
+import "provisioning/v0/compute.proto";
+
+service JobService {
+  rpc ListJobs(ListJobsRequest) returns (ListJobsResponse) {}
+
+  rpc GetJob(GetJobRequest) returns (Job) {}
+
+  // こいつだけApplyにできないのは気持ち悪い
+  rpc StartJob(StartJobRequest) returns (Job) {}
+
+  rpc DeleteJob(DeleteJobRequest) returns (google.protobuf.Empty) {}
+
+  // rpc WatchJobs(WatchJobsRequest) returns (stream WatchJobsResponse) {}
+}
+
+message Job {
+  n0stack.Metadata metadata = 1;
+  JobSpec spec = 2;
+  JobStatus status = 3;
+  repeated n0stack.Component components = 4;  
+}
+
+message JobSpec {
+  // TODO: どうしたらいいか思いつかない
+  n0stack.provisioning.Compute compute = 1;
+}
+
+message JobStatus {
+  enum JobState {
+    // not scheduled
+    PENDING = 0;
+
+    RUNNING = 3;
+    FINISHED = 4;
+
+    // falied state because failed some process on API.
+    FAILED = 1;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 2;
+  }
+  JobState state = 1;
+
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp finish_time = 3;
+}
+
+message ListJobsRequest {}
+
+message ListJobsResponse{
+  repeated Job jobs = 1;
+}
+
+message GetJobRequest {
+  string name = 1;
+}
+
+message StartJobRequest {
+  n0stack.Metadata metadata = 1;
+  JobSpec spec = 2;
+}
+
+message DeleteJobRequest {
+  string name = 1;
+}
+
+// message WatchJobsRequest {}
+
+// message WatchJobsResponse {
+//   enum JobEvents {
+//     APPLY = 0;
+//     DELETE = 1;
+//   }
+//   JobEvents event = 1;
+//   Job network = 2;
+// }

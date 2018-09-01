@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/configuration/v0;pconfiguration";
+
+package n0stack.configuration;
+
+import "google/protobuf/empty.proto";
+
+import "v0/component.proto";
+import "v0/metadata.proto";
+
+service PackerService {
+  rpc ListPackers(ListPackersRequest) returns (ListPackersResponse) {}
+
+  rpc GetPacker(GetPackerRequest) returns (Packer) {}
+
+  rpc ApplyPacker(ApplyPackerRequest) returns (Packer) {}
+
+  rpc DeletePacker(DeletePackerRequest) returns (google.protobuf.Empty) {}
+
+  // rpc WatchPackers(WatchPackersRequest) returns (stream WatchPackersResponse) {}
+
+  rpc BuildPacker(BuildPackerRequest) returns (BuildPackerResponse) {}
+}
+
+message Packer {
+  n0stack.Metadata metadata = 1;
+  PackerSpec spec = 2;
+  PackerStatus status = 3;
+  repeated n0stack.Component components = 4;  
+}
+
+message PackerSpec {
+  string image_name = 1;
+
+  string repository = 2;
+  string work_direcotry = 3;
+  string template_file = 4;
+}
+
+message PackerStatus {
+  enum PackerState {
+    // not scheduled
+    PENDING = 0;
+
+    AVAILABLE = 3;
+
+    // falied state because failed some process on API.
+    FAILED = 1;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 2;
+  }
+  PackerState state = 1;
+}
+
+message ListPackersRequest {}
+
+message ListPackersResponse{
+  repeated Packer packers = 1;
+}
+
+message GetPackerRequest {
+  string name = 1;
+}
+
+message ApplyPackerRequest {
+  n0stack.Metadata metadata = 1;
+  PackerSpec spec = 2;
+}
+
+message DeletePackerRequest {
+  string name = 1;
+}
+
+// message WatchPackersRequest {}
+
+// message WatchPackersResponse {
+//   enum PackerEvents {
+//     APPLY = 0;
+//     DELETE = 1;
+//   }
+//   PackerEvents event = 1;
+//   Packer packer = 2;
+// }
+
+message BuildPackerRequest {}
+message BuildPackerResponse {}

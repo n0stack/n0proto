@@ -5,8 +5,11 @@ option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
+import "v0/component.proto";
 import "v0/metadata.proto";
+import "provisioning/v0/volume.proto";
 
 service ImageService {
   rpc ListImages(ListImagesRequest) returns (ListImagesResponse) {}
@@ -17,29 +20,31 @@ service ImageService {
 
   rpc DeleteImage(DeleteImageRequest) returns (google.protobuf.Empty) {}
   
-  // rpc RebuildImage(RebuildImageRequest) returns (Image) {}
+  // DownloadやUploadをgRPCを実現するのは少し面倒なので検討中
+  // rpc DownloadImage(DownloadImageRequest) returns (stream DownloadImageResponse) {}
+  rpc UploadImage(UploadImageRequest) returns (UploadImageResponse) {}
 
-  // rpc Download(DownloadRequest) returns (stream DownloadResponse) {}
+  rpc CreateVolumeFromImage(CreateVolumeFromImageRequest) returns (n0stack.provisioning.Volume) {}
 }
 
 message Image {
   n0stack.Metadata metadata = 1;
   ImageSpec spec = 2;
   ImageStatus status = 3;
+  repeated n0stack.Component components = 4;
 }
 
-// 途中
 message ImageSpec {
-  // enum BuildType {
-  //   PACKER = 0;
-  //   // DOWNLOAD
-  //   // SNAPSHOT
-  // }
-  // Kind kind = 2;
+  // 書くことがない
 }
 
 message ImageStatus {
-  map<string, string> revisions = 1;
+  message Revision {
+    string hash = 1;
+    string tag = 2;
+    google.protobuf.Timestamp built_time = 3;
+  }
+  repeated Revision revisions = 1;
 }
 
 message ListImagesRequest {}
@@ -61,15 +66,26 @@ message DeleteImageRequest {
   string name = 1;
 }
 
-// message RebuildImageRequest {
-//   string id = 1;
-// }
-
 // message DownloadRequest {
-//   string id = 1;
-//   string revision = 2;
+//   string name = 1;
+//   string revision_hash = 2;
+//   string revision_tag = 3;
 // }
 
 // message DownloadResponse {
 //   bytes asset = 1;
 // }
+
+message UploadImageRequest {
+  // TODO
+}
+
+message UploadImageResponse {}
+
+message CreateVolumeFromImageRequest {
+  string name = 1;
+
+  // oneofにしたほうがいいかもしれない
+  string revision_hash = 2;
+  string revision_tag = 3;
+}

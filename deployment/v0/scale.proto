@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/deployment/v0;pdeployment";
+
+package n0stack.deployment;
+
+import "google/protobuf/empty.proto";
+
+import "v0/component.proto";
+import "v0/metadata.proto";
+
+service ScaleService {
+  rpc ListScales(ListScalesRequest) returns (ListScalesResponse) {}
+
+  rpc GetScale(GetScaleRequest) returns (Scale) {}
+
+  rpc StartScale(StartScaleRequest) returns (Scale) {}
+
+  rpc DeleteScale(DeleteScaleRequest) returns (google.protobuf.Empty) {}
+
+  // rpc WatchScales(WatchScalesRequest) returns (stream WatchScalesResponse) {}
+}
+
+message Scale {
+  n0stack.Metadata metadata = 1;
+  ScaleSpec spec = 2;
+  ScaleStatus status = 3;
+  repeated n0stack.Component components = 4;  
+}
+
+message ScaleSpec {
+  uint32 replicas = 1;
+
+  message Template {
+    n0stack.Metadata metadata = 1;
+
+    uint32 vcpus = 2;
+    string cpu_request = 3;
+    // string cpu_limit = 4;
+
+    uint64 memory_bytes_request = 5;
+    uint64 memory_bytes_limit = 6;
+
+    uint64 volume_bytes = 7;
+    string image_name = 9;
+    string image_revision_tag = 10;
+    string image_revision_hash = 11;
+
+    repeated string network_names = 8;
+  }
+  Template template = 2;
+}
+
+message ScaleStatus {
+  enum ScaleState {
+    // not scheduled
+    PENDING = 0;
+
+    RUNNING = 3;
+
+    // falied state because failed some process on API.
+    FAILED = 1;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 2;
+  }
+  ScaleState state = 1;
+}
+
+message ListScalesRequest {}
+
+message ListScalesResponse{
+  repeated Scale scales = 1;
+}
+
+message GetScaleRequest {
+  string name = 1;
+}
+
+message StartScaleRequest {
+  n0stack.Metadata metadata = 1;
+  ScaleSpec spec = 2;
+}
+
+message DeleteScaleRequest {
+  string name = 1;
+}
+
+// message WatchScalesRequest {}
+
+// message WatchScalesResponse {
+//   enum ScaleEvents {
+//     APPLY = 0;
+//     DELETE = 1;
+//   }
+//   ScaleEvents event = 1;
+//   Scale network = 2;
+// }

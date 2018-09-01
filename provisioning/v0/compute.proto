@@ -52,8 +52,6 @@ message ComputeSpec {
   uint32 vcpus = 1;
 
   // Memory
-  // request_memory_bytes
-  // limit_memory_bytes
   uint64 memory_bytes = 2;
 
   // Volume

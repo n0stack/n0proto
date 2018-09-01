@@ -24,7 +24,8 @@ after_success:
   - cd proto.go
   - git add --all
   - git commit -m "Update for $TRAVIS_COMMIT on github.com/n0stack/proto with a travis job $TRAVIS_BUILD_ID"
-  - git push -f origin master
+  # 何故かmaster onlyが発動しないので暫定処置
+  # - git push -f origin master
 
 notifications:
   slack:
