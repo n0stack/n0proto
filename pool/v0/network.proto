@@ -50,7 +50,7 @@ message NetworkStatus {
   }
   NetworkState state = 1;
 
-  repeated n0stack.resource.NetworkInterface reserved_network_interfaces = 2;
+  map<string, n0stack.resource.NetworkInterface> reserved_network_interfaces = 2;
 }
 
 message ListNetworksRequest {}
