@@ -29,13 +29,8 @@ message Network {
 
 message NetworkSpec {
   string ipv4_cidr = 1;
-  string ipv4_gateway = 2;
-
-  string ipv6_cidr = 3;
-  string ipv6_gateway = 4;
-
-  string name_server = 5;
-  string domain = 6;
+  string ipv6_cidr = 2;
+  string domain = 3;
 }
 
 message NetworkStatus {
