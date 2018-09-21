@@ -1,13 +1,12 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
+option go_package = "github.com/n0stack/proto.go/pool/v0;ppool";
 
-package n0stack.provisioning;
+package n0stack.pool;
 
 import "google/protobuf/empty.proto";
-
-import "v0/component.proto";
 import "v0/metadata.proto";
+import "resource/v0/network_interface.proto";
 
 service NetworkService {
   rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse) {}
@@ -18,14 +17,14 @@ service NetworkService {
 
   rpc DeleteNetwork(DeleteNetworkRequest) returns (google.protobuf.Empty) {}
 
-  rpc WatchNetworks(WatchNetworksRequest) returns (stream WatchNetworksResponse) {}
+  rpc ReserveNetworkInterface(ReserveNetworkInterfaceRequest) returns (n0stack.resource.NetworkInterface) {}
+  rpc ReleaseNetworkInterface(ReleaseNetworkInterfaceRequest) returns (google.protobuf.Empty) {}
 }
 
 message Network {
   n0stack.Metadata metadata = 1;
   NetworkSpec spec = 2;
   NetworkStatus status = 3;
-  repeated n0stack.Component components = 4;  
 }
 
 message NetworkSpec {
@@ -41,22 +40,20 @@ message NetworkSpec {
 
 message NetworkStatus {
   enum NetworkState {
-    // not scheduled
-    PENDING = 0;
-
-    AVAILABLE = 3;
-
     // falied state because failed some process on API.
-    FAILED = 1;
-
+    FAILED = 0;
+  
     // unknown state because failed to connect for scheduled node after RUNNING.
-    UNKNOWN = 2;
+    UNKNOWN = 1;
+
+    AVAILABLE = 2;
   }
   NetworkState state = 1;
+
+  repeated n0stack.resource.NetworkInterface reserved_network_interfaces = 2;
 }
 
 message ListNetworksRequest {}
-
 message ListNetworksResponse{
   repeated Network networks = 1;
 }
@@ -74,13 +71,20 @@ message DeleteNetworkRequest {
   string name = 1;
 }
 
-message WatchNetworksRequest {}
+message ReserveNetworkInterfaceRequest {
+  string name = 1;
+  string network_interface_name = 2;
 
-message WatchNetworksResponse {
-  enum NetworkEvents {
-    APPLY = 0;
-    DELETE = 1;
-  }
-  NetworkEvents event = 1;
-  Network network = 2;
+  map<string, string> annotations = 3;
+
+  // 以下 optional
+  string hardware_address = 4;
+
+  string ipv4_address = 5;
+  string ipv6_address = 6;
+}
+
+message ReleaseNetworkInterfaceRequest {
+  string name = 1;
+  string network_interface_name = 2;
 }

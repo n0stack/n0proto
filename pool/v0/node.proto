@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/pool/v0;ppool";
+
+package n0stack.pool;
+
+import "google/protobuf/empty.proto";
+import "v0/metadata.proto";
+import "resource/v0/compute.proto";
+import "resource/v0/storage.proto";
+
+service NodeService {
+  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse) {}
+
+  rpc GetNode(GetNodeRequest) returns (Node) {}
+
+  rpc ApplyNode(ApplyNodeRequest) returns (Node) {}
+
+  rpc DeleteNode(DeleteNodeRequest) returns (google.protobuf.Empty) {}
+
+  rpc ReserveCompute(ReserveComputeRequest) returns (n0stack.resource.Compute) {}
+  rpc ReleaseCompute(ReleaseComputeRequest) returns (google.protobuf.Empty) {}
+
+  rpc ReserveStorage(ReserveStorageRequest) returns (n0stack.resource.Storage) {}
+  rpc ReleaseStorage(ReleaseStorageRequest) returns (google.protobuf.Empty) {}
+}
+
+message Node {
+  n0stack.Metadata metadata = 1;
+  NodeSpec spec = 2;
+  NodeStatus status = 3;
+}
+
+message NodeSpec {
+  string serial = 1;
+
+  string address = 2;
+  string ipmi_address = 3;
+}
+
+message NodeStatus {
+  enum NodeState {
+    NotReady = 0;
+    Ready = 1;
+  }
+  NodeState state = 1;
+
+  n0stack.resource.Compute compute = 2;
+  map<string, n0stack.resource.Compute> reserved_computes = 3;
+  
+  n0stack.resource.Storage storage = 4;
+  map<string, n0stack.resource.Storage> reserved_storages = 5;
+}
+
+message ListNodesRequest {}
+message ListNodesResponse {
+  repeated Node nodes = 1;
+}
+
+message GetNodeRequest {
+  string name = 1;
+}
+
+message ApplyNodeRequest {
+  n0stack.Metadata metadata = 1;
+  NodeSpec spec = 2;
+}
+
+message DeleteNodeRequest {
+  string name = 1;
+}
+
+message ReserveComputeRequest {
+  // optional
+  string name = 1;
+  string compute_name = 2;
+
+  map<string, string> annotations = 3;
+
+  // CPU
+  // request_
+  // limit_
+  uint32 vcpus = 4;
+
+  // Memory
+  // request_memory_bytes
+  // limit_memory_bytes
+  uint64 memory_bytes = 5;
+}
+
+message ReleaseComputeRequest {
+  string name = 1;
+  string compute_name = 2;
+}
+
+message ReserveStorageRequest {
+  // optional
+  string name = 1;
+  string storage_name = 2;
+
+  map<string, string> annotations = 3;
+
+  uint64 bytes = 4;
+}
+
+message ReleaseStorageRequest {
+  string name = 1;
+  string storage_name = 2;
+}

@@ -5,8 +5,7 @@ option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
-
-import "v0/component.proto";
+import "resource/v0/storage.proto";
 import "v0/metadata.proto";
 
 service VolumeService {
@@ -15,39 +14,39 @@ service VolumeService {
   rpc GetVolume(GetVolumeRequest) returns (Volume) {}
 
   rpc ApplyVolume(ApplyVolumeRequest) returns (Volume) {}
-
+  
   rpc DeleteVolume(DeleteVolumeRequest) returns (google.protobuf.Empty) {}
+
+  rpc DownloadVolume(DownloadVolumeRequest) returns (Volume) {}
 }
 
 message Volume {
   n0stack.Metadata metadata = 1;
   VolumeSpec spec = 2;
   VolumeStatus status = 3;
-  repeated n0stack.Component components = 4;
 }
 
 message VolumeSpec {
-  uint64 bytes = 1;
+  n0stack.resource.Storage storage = 1;
 }
 
 message VolumeStatus {
   enum VolumeState {
-    // not scheduled
-    PENDING = 0;
-
-    AVAILABLE = 3;
-
     // falied state because failed some process on API.
-    FAILED = 1;
+    FAILED = 0;
 
     // unknown state because failed to connect for scheduled node after RUNNING.
-    UNKNOWN = 2;
+    UNKNOWN = 1;
+
+    AVAILABLE = 2;
   }
   VolumeState state = 1;
+
+  string node_name = 2;
+  string storage_name = 3;
 }
 
 message ListVolumesRequest {}
-
 message ListVolumesResponse {
   repeated Volume volumes = 1;
 }
@@ -63,4 +62,11 @@ message ApplyVolumeRequest {
 
 message DeleteVolumeRequest {
   string name = 1;
+}
+
+message DownloadVolumeRequest {
+  n0stack.Metadata metadata = 1;
+  VolumeSpec spec = 2;
+
+  string source_url = 3;
 }

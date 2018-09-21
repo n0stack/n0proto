@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
+
+package n0stack.provisioning;
+
+import "google/protobuf/empty.proto";
+import "resource/v0/compute.proto";
+import "resource/v0/network_interface.proto";
+import "v0/metadata.proto";
+
+service VirtualMachineService {
+  rpc ListVirtualMachines(ListVirtualMachinesRequest) returns (ListVirtualMachinesResponse) {}
+
+  rpc GetVirtualMachine(GetVirtualMachineRequest) returns (VirtualMachine) {}
+
+  rpc ApplyVirtualMachine(ApplyVirtualMachineRequest) returns (VirtualMachine) {}
+
+  rpc DeleteVirtualMachine(DeleteVirtualMachineRequest) returns (google.protobuf.Empty) {}
+
+  // VM actions
+  // -> RUNNING
+  rpc Boot(BootVirtualMachineRequest) returns (VirtualMachine) {}
+  // RUNNING -> RUNNING
+  rpc Reboot(RebootVirtualMachineRequest) returns (VirtualMachine) {}
+  // RUNNING -> SHUTDOWN
+  rpc Shutdown(ShutdownVirtualMachineRequest) returns (VirtualMachine) {}
+  // RUNNING -> PAUSED
+  rpc Save(SaveVirtualMachineRequest) returns (VirtualMachine) {}
+}
+
+message VirtualMachine {
+  n0stack.Metadata metadata = 1;
+  VirtualMachineSpec spec = 2;
+  VirtualMachineStatus status = 3;
+}
+
+message VirtualMachineSpec {
+  n0stack.resource.Compute compute = 1;
+
+  // Volume
+  repeated string volume_name = 2;
+
+  // Network
+  message NICSpec {
+    string network_name = 1;
+    n0stack.resource.NetworkInterface network_interface = 2;
+  }
+  map<string, NICSpec> nics = 3;
+}
+
+message VirtualMachineStatus {
+  enum VirtualMachineState {
+    // falied state because failed some process on API.
+    FAILED = 0;
+
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 1;
+
+    // running vm
+    RUNNING = 2;
+    SHUTDOWN = 3;
+    PAUSED = 4;
+  }
+  VirtualMachineState state = 1;
+
+  string compute_node_name = 2;
+  string compute_name = 3;
+
+  message NICStatus {
+    string node_name = 1;
+    string network_interface_name = 2;
+  }
+  map<string, NICStatus> nic_statuses = 4;
+}
+
+message ListVirtualMachinesRequest {}
+message ListVirtualMachinesResponse {
+  repeated VirtualMachine VirtualMachines = 1;
+}
+
+message GetVirtualMachineRequest {
+  string name = 1;
+}
+
+message ApplyVirtualMachineRequest {
+  n0stack.Metadata metadata = 1;
+  VirtualMachineSpec spec = 2;
+}
+
+message DeleteVirtualMachineRequest {
+  string name = 1;
+}
+
+message BootVirtualMachineRequest {
+  string name = 1;
+}
+
+message RebootVirtualMachineRequest {
+  string name = 1;
+  bool hard = 2;
+}
+
+message ShutdownVirtualMachineRequest {
+  string name = 1;
+  bool hard = 2;
+}
+
+message SaveVirtualMachineRequest {
+  string name = 1;
+}

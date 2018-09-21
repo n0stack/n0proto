@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/resource/v0;presource";
+
+package n0stack.resource;
+
+message NetworkInterface {
+  map<string, string> annotations = 1;
+
+  string hardware_address = 2;
+
+  string ipv4_address = 3;
+  string ipv6_address = 4;
+}

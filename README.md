@@ -38,16 +38,14 @@
 - Metadata: 管理に必要な情報をいれる
 - Spec: 実装に依存しない汎用的なモデルの設計をいれる
 - Status: 実装に依存しない汎用的なモデルの状態をいれる
-- Components: アドオン的な拡張的な実装の状態をいれる
 
 #### 書き込みの優先順位
 
 |  | API | User | Component |
 | -- | -- | -- | -- |
 | Metadata | 2 | 1 | - |
-| Spec | 2 | 1 | - |
+| Spec | - | 1 | - |
 | Status | 1 | - | - |
-| Components | - | - | 1 |
 
 ## build
 
