@@ -42,11 +42,11 @@ message VirtualMachineSpec {
   repeated string volume_name = 2;
 
   // Network
-  message NICSpec {
+  message NIC {
     string network_name = 1;
     n0stack.resource.NetworkInterface network_interface = 2;
   }
-  map<string, NICSpec> nics = 3;
+  repeated NIC nics = 3;
 }
 
 message VirtualMachineStatus {
@@ -67,11 +67,7 @@ message VirtualMachineStatus {
   string compute_node_name = 2;
   string compute_name = 3;
 
-  message NICStatus {
-    string node_name = 1;
-    string network_interface_name = 2;
-  }
-  map<string, NICStatus> nic_statuses = 4;
+  repeated string network_interface_names = 4;
 }
 
 message ListVirtualMachinesRequest {}
