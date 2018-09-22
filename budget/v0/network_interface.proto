@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/n0stack/proto.go/resource/v0;presource";
+option go_package = "github.com/n0stack/proto.go/budget/v0;pbudget";
 
-package n0stack.resource;
+package n0stack.budget;
 
 message NetworkInterface {
   map<string, string> annotations = 1;

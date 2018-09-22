@@ -6,24 +6,8 @@ package n0stack.pool;
 
 import "google/protobuf/empty.proto";
 import "v0/metadata.proto";
-import "resource/v0/compute.proto";
-import "resource/v0/storage.proto";
-
-service NodeService {
-  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse) {}
-
-  rpc GetNode(GetNodeRequest) returns (Node) {}
-
-  rpc ApplyNode(ApplyNodeRequest) returns (Node) {}
-
-  rpc DeleteNode(DeleteNodeRequest) returns (google.protobuf.Empty) {}
-
-  rpc ReserveCompute(ReserveComputeRequest) returns (ReserveComputeResponse) {}
-  rpc ReleaseCompute(ReleaseComputeRequest) returns (google.protobuf.Empty) {}
-
-  rpc ReserveStorage(ReserveStorageRequest) returns (ReserveStorageResponse) {}
-  rpc ReleaseStorage(ReleaseStorageRequest) returns (google.protobuf.Empty) {}
-}
+import "budget/v0/compute.proto";
+import "budget/v0/storage.proto";
 
 message Node {
   n0stack.Metadata metadata = 1;
@@ -36,6 +20,9 @@ message NodeSpec {
 
   string address = 2;
   string ipmi_address = 3;
+
+  uint32 cpu_milli_cores = 4;
+  uint64 storage_bytes = 5;
 }
 
 message NodeStatus {
@@ -45,11 +32,28 @@ message NodeStatus {
   }
   NodeState state = 1;
 
-  n0stack.resource.Compute compute = 2;
-  map<string, n0stack.resource.Compute> reserved_computes = 3;
-  
-  n0stack.resource.Storage storage = 4;
-  map<string, n0stack.resource.Storage> reserved_storages = 5;
+  map<string, n0stack.budget.Compute> reserved_computes = 2;
+  map<string, n0stack.budget.Storage> reserved_storages = 3;
+}
+
+service NodeService {
+  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse) {}
+
+  rpc GetNode(GetNodeRequest) returns (Node) {}
+
+  rpc ApplyNode(ApplyNodeRequest) returns (Node) {}
+
+  rpc DeleteNode(DeleteNodeRequest) returns (google.protobuf.Empty) {}
+
+  rpc ScheduleCompute(ScheduleComputeRequest) returns (ReserveComputeResponse) {}
+  rpc ReserveCompute(ReserveComputeRequest) returns (ReserveComputeResponse) {}
+  // rpc ResizeCompute(ResizeComputeRequest) returns (ReserveComputeResponse) {}
+  rpc ReleaseCompute(ReleaseComputeRequest) returns (google.protobuf.Empty) {}
+
+  rpc ScheduleStorage(ScheduleStorageRequest) returns (ReserveStorageResponse) {}
+  rpc ReserveStorage(ReserveStorageRequest) returns (ReserveStorageResponse) {}
+  // rpc ResizeStorae() returns () {}
+  rpc ReleaseStorage(ReleaseStorageRequest) returns (google.protobuf.Empty) {}
 }
 
 message ListNodesRequest {}
@@ -70,29 +74,24 @@ message DeleteNodeRequest {
   string name = 1;
 }
 
+message ScheduleComputeRequest {
+  string compute_name = 2;
+  
+  n0stack.budget.Compute compute = 3;
+}
+
 message ReserveComputeRequest {
-  // optional
   string name = 1;
   string compute_name = 2;
-
-  map<string, string> annotations = 3;
-
-  // CPU
-  // request_
-  // limit_
-  uint32 vcpus = 4;
-
-  // Memory
-  // request_memory_bytes
-  // limit_memory_bytes
-  uint64 memory_bytes = 5;
+  
+  n0stack.budget.Compute compute = 3;
 }
 
 message ReserveComputeResponse {
   string name = 1;
   string compute_name = 2;
 
-  n0stack.resource.Compute compute = 3;
+  n0stack.budget.Compute compute = 3;
 }
 
 message ReleaseComputeRequest {
@@ -100,21 +99,25 @@ message ReleaseComputeRequest {
   string compute_name = 2;
 }
 
-message ReserveStorageRequest {
-  // optional
+message ScheduleStorageRequest {
   string name = 1;
   string storage_name = 2;
 
-  map<string, string> annotations = 3;
+  n0stack.budget.Storage storage = 3;
+}
 
-  uint64 bytes = 4;
+message ReserveStorageRequest {
+  string name = 1;
+  string storage_name = 2;
+
+  n0stack.budget.Storage storage = 3;
 }
 
 message ReserveStorageResponse {
   string name = 1;
   string storage_name = 2;
 
-  n0stack.resource.Storage storage = 3;
+  n0stack.budget.Storage storage = 3;
 }
 
 message ReleaseStorageRequest {

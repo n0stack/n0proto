@@ -5,20 +5,7 @@ option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
-import "resource/v0/storage.proto";
 import "v0/metadata.proto";
-
-service VolumeService {
-  rpc ListVolumes(ListVolumesRequest) returns (ListVolumesResponse) {}
-
-  rpc GetVolume(GetVolumeRequest) returns (Volume) {}
-
-  rpc ApplyVolume(ApplyVolumeRequest) returns (Volume) {}
-  
-  rpc DeleteVolume(DeleteVolumeRequest) returns (google.protobuf.Empty) {}
-
-  rpc DownloadVolume(DownloadVolumeRequest) returns (Volume) {}
-}
 
 message Volume {
   n0stack.Metadata metadata = 1;
@@ -27,23 +14,55 @@ message Volume {
 }
 
 message VolumeSpec {
-  n0stack.resource.Storage storage = 1;
+  uint64 request_bytes = 1;
+  uint64 limit_bytes = 2;
 }
 
 message VolumeStatus {
   enum VolumeState {
     // falied state because failed some process on API.
     FAILED = 0;
-
+  
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 1;
-
+  
     AVAILABLE = 2;
+    IN_USE = 3;
   }
   VolumeState state = 1;
 
   string node_name = 2;
   string storage_name = 3;
+}
+
+service VolumeService {
+  rpc CreateEmptyVolume(CreateEmptyVolumeRequest) returns (Volume) {}
+  rpc CreateVolumeWithDownloading(CreateVolumeWithDownloadingRequest) returns (Volume) {}
+
+  rpc ListVolumes(ListVolumesRequest) returns (ListVolumesResponse) {}
+
+  rpc GetVolume(GetVolumeRequest) returns (Volume) {}
+
+  rpc UpdateVolume(UpdateVolumeRequest) returns (Volume) {}
+
+  rpc DeleteVolume(DeleteVolumeRequest) returns (google.protobuf.Empty) {}
+
+  rpc SetInuseVolume(google.protobuf.Empty) returns (Volume) {}
+  rpc SetAvailableVolume(google.protobuf.Empty) returns (Volume) {}
+
+  // // when AVAILABLE, not IN_USE
+  // rpc MigrateVolume(MigrateVolumeRequest) returns (Volume) {}
+}
+
+message CreateEmptyVolumeRequest {
+  n0stack.Metadata metadata = 1;
+  VolumeSpec spec = 2;
+}
+message CreateVolumeWithDownloadingRequest {
+  n0stack.Metadata metadata = 1;
+  VolumeSpec spec = 2;
+
+  string source_url = 3;
 }
 
 message ListVolumesRequest {}
@@ -55,7 +74,7 @@ message GetVolumeRequest {
   string name = 1;
 }
 
-message ApplyVolumeRequest {
+message UpdateVolumeRequest {
   n0stack.Metadata metadata = 1;
   VolumeSpec spec = 2;
 }
@@ -64,9 +83,7 @@ message DeleteVolumeRequest {
   string name = 1;
 }
 
-message DownloadVolumeRequest {
-  n0stack.Metadata metadata = 1;
-  VolumeSpec spec = 2;
-
-  string source_url = 3;
-}
+// message MigrateVolumeRequest {
+//   string name = 1;
+//   string node_name = 2;
+// }

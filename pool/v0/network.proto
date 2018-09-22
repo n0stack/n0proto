@@ -6,20 +6,7 @@ package n0stack.pool;
 
 import "google/protobuf/empty.proto";
 import "v0/metadata.proto";
-import "resource/v0/network_interface.proto";
-
-service NetworkService {
-  rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse) {}
-
-  rpc GetNetwork(GetNetworkRequest) returns (Network) {}
-
-  rpc ApplyNetwork(ApplyNetworkRequest) returns (Network) {}
-
-  rpc DeleteNetwork(DeleteNetworkRequest) returns (google.protobuf.Empty) {}
-
-  rpc ReserveNetworkInterface(ReserveNetworkInterfaceRequest) returns (ReserveNetworkInterfaceResponse) {}
-  rpc ReleaseNetworkInterface(ReleaseNetworkInterfaceRequest) returns (google.protobuf.Empty) {}
-}
+import "budget/v0/network_interface.proto";
 
 message Network {
   n0stack.Metadata metadata = 1;
@@ -45,7 +32,20 @@ message NetworkStatus {
   }
   NetworkState state = 1;
 
-  map<string, n0stack.resource.NetworkInterface> reserved_network_interfaces = 2;
+  map<string, n0stack.budget.NetworkInterface> reserved_network_interfaces = 2;
+}
+
+service NetworkService {
+  rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse) {}
+
+  rpc GetNetwork(GetNetworkRequest) returns (Network) {}
+
+  rpc ApplyNetwork(ApplyNetworkRequest) returns (Network) {}
+
+  rpc DeleteNetwork(DeleteNetworkRequest) returns (google.protobuf.Empty) {}
+
+  rpc ReserveNetworkInterface(ReserveNetworkInterfaceRequest) returns (ReserveNetworkInterfaceResponse) {}
+  rpc ReleaseNetworkInterface(ReleaseNetworkInterfaceRequest) returns (google.protobuf.Empty) {}
 }
 
 message ListNetworksRequest {}
@@ -70,20 +70,14 @@ message ReserveNetworkInterfaceRequest {
   string name = 1;
   string network_interface_name = 2;
 
-  map<string, string> annotations = 3;
-
-  // 以下 optional
-  string hardware_address = 4;
-
-  string ipv4_address = 5;
-  string ipv6_address = 6;
+  n0stack.budget.NetworkInterface network_interface = 3;
 }
 
 message ReserveNetworkInterfaceResponse {
   string name = 1;
   string network_interface_name = 2;
 
-  n0stack.resource.NetworkInterface network_interface = 3;
+  n0stack.budget.NetworkInterface network_interface = 3;
 }
 
 message ReleaseNetworkInterfaceRequest {
