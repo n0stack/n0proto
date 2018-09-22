@@ -22,7 +22,7 @@ message NodeSpec {
   string ipmi_address = 3;
 
   uint32 cpu_milli_cores = 4;
-  uint32 memory_bytes = 5;
+  uint64 memory_bytes = 5;
   uint64 storage_bytes = 6;
 }
 
