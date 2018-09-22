@@ -18,10 +18,10 @@ service NodeService {
 
   rpc DeleteNode(DeleteNodeRequest) returns (google.protobuf.Empty) {}
 
-  rpc ReserveCompute(ReserveComputeRequest) returns (n0stack.resource.Compute) {}
+  rpc ReserveCompute(ReserveComputeRequest) returns (ReserveComputeResponse) {}
   rpc ReleaseCompute(ReleaseComputeRequest) returns (google.protobuf.Empty) {}
 
-  rpc ReserveStorage(ReserveStorageRequest) returns (n0stack.resource.Storage) {}
+  rpc ReserveStorage(ReserveStorageRequest) returns (ReserveStorageResponse) {}
   rpc ReleaseStorage(ReleaseStorageRequest) returns (google.protobuf.Empty) {}
 }
 
@@ -88,6 +88,13 @@ message ReserveComputeRequest {
   uint64 memory_bytes = 5;
 }
 
+message ReserveComputeResponse {
+  string name = 1;
+  string compute_name = 2;
+
+  n0stack.resource.Compute compute = 3;
+}
+
 message ReleaseComputeRequest {
   string name = 1;
   string compute_name = 2;
@@ -101,6 +108,13 @@ message ReserveStorageRequest {
   map<string, string> annotations = 3;
 
   uint64 bytes = 4;
+}
+
+message ReserveStorageResponse {
+  string name = 1;
+  string storage_name = 2;
+
+  n0stack.resource.Storage storage = 3;
 }
 
 message ReleaseStorageRequest {

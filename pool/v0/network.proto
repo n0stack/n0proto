@@ -17,7 +17,7 @@ service NetworkService {
 
   rpc DeleteNetwork(DeleteNetworkRequest) returns (google.protobuf.Empty) {}
 
-  rpc ReserveNetworkInterface(ReserveNetworkInterfaceRequest) returns (n0stack.resource.NetworkInterface) {}
+  rpc ReserveNetworkInterface(ReserveNetworkInterfaceRequest) returns (ReserveNetworkInterfaceResponse) {}
   rpc ReleaseNetworkInterface(ReleaseNetworkInterfaceRequest) returns (google.protobuf.Empty) {}
 }
 
@@ -37,7 +37,7 @@ message NetworkStatus {
   enum NetworkState {
     // falied state because failed some process on API.
     FAILED = 0;
-  
+
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 1;
 
@@ -77,6 +77,13 @@ message ReserveNetworkInterfaceRequest {
 
   string ipv4_address = 5;
   string ipv6_address = 6;
+}
+
+message ReserveNetworkInterfaceResponse {
+  string name = 1;
+  string network_interface_name = 2;
+
+  n0stack.resource.NetworkInterface network_interface = 3;
 }
 
 message ReleaseNetworkInterfaceRequest {
