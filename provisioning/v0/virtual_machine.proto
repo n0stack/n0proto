@@ -48,10 +48,12 @@ message VirtualMachineStatus {
   }
   VirtualMachineState state = 1;
 
-  string compute_node_name = 2;
-  string compute_name = 3;
+  string uuid = 2;
 
-  repeated string network_interface_names = 4;
+  string compute_node_name = 3;
+  string compute_name = 4;
+
+  repeated string network_interface_names = 5;
 }
 
 service VirtualMachineService {
