@@ -47,8 +47,8 @@ service VolumeService {
 
   rpc DeleteVolume(DeleteVolumeRequest) returns (google.protobuf.Empty) {}
 
-  rpc SetInuseVolume(google.protobuf.Empty) returns (Volume) {}
-  rpc SetAvailableVolume(google.protobuf.Empty) returns (Volume) {}
+  rpc SetInuseVolume(SetInuseVolumeRequest) returns (Volume) {}
+  rpc SetAvailableVolume(SetAvailableVolumeRequest) returns (Volume) {}
 
   // // when AVAILABLE, not IN_USE
   // rpc MigrateVolume(MigrateVolumeRequest) returns (Volume) {}
@@ -87,3 +87,11 @@ message DeleteVolumeRequest {
 //   string name = 1;
 //   string node_name = 2;
 // }
+
+message SetInuseVolumeRequest {
+  string name = 1;
+}
+
+message SetAvailableVolumeRequest {
+  string name = 1;
+}
