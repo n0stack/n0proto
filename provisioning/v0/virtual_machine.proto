@@ -20,7 +20,7 @@ message VirtualMachineSpec {
   uint64 request_memory_bytes = 3;
   uint64 limit_memory_bytes = 4;
 
-  repeated string volume_name = 5;
+  repeated string volume_names = 5;
 
   message NIC {
     string network_name = 1;
