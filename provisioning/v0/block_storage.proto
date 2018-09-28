@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
+
+package n0stack.provisioning;
+
+import "google/protobuf/empty.proto";
+import "v0/metadata.proto";
+
+message BlockStorage {
+  n0stack.Metadata metadata = 1;
+  BlockStorageSpec spec = 2;
+  BlockStorageStatus status = 3;
+}
+
+message BlockStorageSpec {
+  uint64 request_bytes = 1;
+  uint64 limit_bytes = 2;
+
+  // IN_USE にならない
+  bool protected = 3;
+
+  // ISOか見極めたい気持ちがある
+  // bool cd = 4;
+}
+
+message BlockStorageStatus {
+  enum BlockStorageState {
+    // falied state because failed some process on API.
+    FAILED = 0;
+  
+    // unknown state because failed to connect for scheduled node after RUNNING.
+    UNKNOWN = 1;
+  
+    AVAILABLE = 2;
+    IN_USE = 3;
+  }
+  BlockStorageState state = 1;
+
+  string node_name = 2;
+  string storage_name = 3;
+}
+
+service BlockStorageService {
+  rpc CreateBlockStorage(CreateBlockStorageRequest) returns (BlockStorage) {}
+  rpc UploadBlockStorage(UploadBlockStorageRequest) returns (BlockStorage) {}
+  rpc CopyBlockStorage(CopyBlockStorageRequest) returns (BlockStorage) {}
+
+  rpc ListBlockStorages(ListBlockStoragesRequest) returns (ListBlockStoragesResponse) {}
+
+  rpc GetBlockStorage(GetBlockStorageRequest) returns (BlockStorage) {}
+
+  rpc UpdateBlockStorage(UpdateBlockStorageRequest) returns (BlockStorage) {}
+
+  rpc DeleteBlockStorage(DeleteBlockStorageRequest) returns (google.protobuf.Empty) {}
+
+  rpc SetInuseBlockStorage(SetInuseBlockStorageRequest) returns (BlockStorage) {}
+  rpc SetAvailableBlockStorage(SetAvailableBlockStorageRequest) returns (BlockStorage) {}
+
+  rpc DownloadBlockStorage(DownloadBlockStorageRequest) returns (stream BlockStorageChunk) {}
+
+  // // when AVAILABLE, not IN_USE
+  // rpc MigrateBlockStorage(MigrateBlockStorageRequest) returns (BlockStorage) {}
+}
+
+message BlockStorageChunk {
+  bytes data = 1;
+}
+
+message CreateBlockStorageRequest {
+  n0stack.Metadata metadata = 1;
+  BlockStorageSpec spec = 2;
+}
+message UploadBlockStorageRequest {
+  message UploadBlockStorageHeader {
+    n0stack.Metadata metadata = 1;
+    BlockStorageSpec spec = 2;
+  }
+
+  oneof value {
+    UploadBlockStorageHeader header = 1;
+    BlockStorageChunk chunk = 2;
+  }
+}
+message CopyBlockStorageRequest {
+  n0stack.Metadata metadata = 1;
+  BlockStorageSpec spec = 2;
+
+  string source_block_storage = 3;
+}
+
+message ListBlockStoragesRequest {}
+message ListBlockStoragesResponse {
+  repeated BlockStorage BlockStorages = 1;
+}
+
+message GetBlockStorageRequest {
+  string name = 1;
+}
+
+message UpdateBlockStorageRequest {
+  n0stack.Metadata metadata = 1;
+  BlockStorageSpec spec = 2;
+}
+
+message DeleteBlockStorageRequest {
+  string name = 1;
+}
+
+message SetInuseBlockStorageRequest {
+  string name = 1;
+}
+
+message SetAvailableBlockStorageRequest {
+  string name = 1;
+}
+
+message DownloadBlockStorageRequest {
+  string name = 1;
+}
+
+// message MigrateBlockStorageRequest {
+//   string name = 1;
+//   string node_name = 2;
+// }
