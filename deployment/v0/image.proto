@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/deployment/v0;pdeployment";
+
+package n0stack.deployment;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "v0/metadata.proto";
+
+message Image {
+  n0stack.Metadata metadata = 1;
+  ImageSpec spec = 2;
+  ImageStatus status = 3;
+}
+
+message ImageSpec {
+}
+
+message ImageStatus {
+  map<string, google.protobuf.Timestamp> registered_block_storage_names = 1;
+  map<string, string> tags = 2;
+}
+
+service ImageService {
+  rpc ListImages(ListImagesRequest) returns (ListImagesResponse) {}
+
+  rpc GetImage(GetImageRequest) returns (Image) {}
+
+  rpc ApplyImage(ApplyImageRequest) returns (Image) {}
+
+  rpc DeleteImage(DeleteImageRequest) returns (google.protobuf.Empty) {}
+
+  rpc RegisterBlockStorage(ImportBlockStorageRequest) returns (Image) {}
+
+  rpc TagImage(TagImageRequest) returns (Image) {}
+  rpc UntagImage(UntagImageRequest) returns (Image) {}
+}
+
+message ListImagesRequest {}
+message ListImagesResponse {
+  repeated Image Images = 1;
+}
+
+message GetImageRequest {
+  string name = 1;
+}
+
+message ApplyImageRequest {
+  n0stack.Metadata metadata = 1;
+  ImageSpec spec = 2;
+}
+
+message DeleteImageRequest {
+  string name = 1;
+}
+
+message ImportBlockStorageRequest {
+  string name = 1;
+  string block_storage_name = 2;
+
+  repeated string tags = 3;
+}
+
+message TagImageRequest {
+  string name = 1;
+  string block_storage_name = 2;
+
+  repeated string tags = 3;
+}
+
+message UntagImageRequest {
+  string name = 1;
+  string tag = 2;
+}
