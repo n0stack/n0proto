@@ -10,12 +10,12 @@ import "v0/metadata.proto";
 
 message Image {
   n0stack.Metadata metadata = 1;
-  ImageSpec spec = 2;
+  // ImageSpec spec = 2;
   ImageStatus status = 3;
 }
 
-message ImageSpec {
-}
+// message ImageSpec {
+// }
 
 message ImageStatus {
   map<string, google.protobuf.Timestamp> registered_block_storage_names = 1;
@@ -48,7 +48,7 @@ message GetImageRequest {
 
 message ApplyImageRequest {
   n0stack.Metadata metadata = 1;
-  ImageSpec spec = 2;
+  // ImageSpec spec = 2;
 }
 
 message DeleteImageRequest {
