@@ -43,7 +43,7 @@ message BlockStorageStatus {
 
 service BlockStorageService {
   rpc CreateBlockStorage(CreateBlockStorageRequest) returns (BlockStorage) {}
-  rpc UploadBlockStorage(UploadBlockStorageRequest) returns (BlockStorage) {}
+  rpc UploadBlockStorage(stream UploadBlockStorageRequest) returns (BlockStorage) {}
   rpc CopyBlockStorage(CopyBlockStorageRequest) returns (BlockStorage) {}
 
   rpc ListBlockStorages(ListBlockStoragesRequest) returns (ListBlockStoragesResponse) {}
