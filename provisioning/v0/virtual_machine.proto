@@ -20,7 +20,7 @@ message VirtualMachineSpec {
   uint64 request_memory_bytes = 3;
   uint64 limit_memory_bytes = 4;
 
-  repeated string volume_names = 5;
+  repeated string block_storage_names = 5;
 
   message NIC {
     string network_name = 1;
@@ -76,6 +76,8 @@ service VirtualMachineService {
   rpc ShutdownVirtualMachine(ShutdownVirtualMachineRequest) returns (VirtualMachine) {}
   // RUNNING -> PAUSED
   rpc SaveVirtualMachine(SaveVirtualMachineRequest) returns (VirtualMachine) {}
+
+  // rpc MigrateVirtualMachine(MigrateVirtualMachineRequest) returns (VirtualMachine) {}
 }
 
 message ApplyVirtualMachineRequest {

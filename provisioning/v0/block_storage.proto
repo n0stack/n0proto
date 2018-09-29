@@ -17,9 +17,6 @@ message BlockStorageSpec {
   uint64 request_bytes = 1;
   uint64 limit_bytes = 2;
 
-  // IN_USE にならない
-  bool protected = 3;
-
   // ISOか見極めたい気持ちがある
   // bool cd = 4;
 }
@@ -28,17 +25,20 @@ message BlockStorageStatus {
   enum BlockStorageState {
     // falied state because failed some process on API.
     FAILED = 0;
-  
+    
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 1;
-  
+    
     AVAILABLE = 2;
     IN_USE = 3;
   }
   BlockStorageState state = 1;
-
+  
   string node_name = 2;
   string storage_name = 3;
+
+  // IN_USE にならない
+  bool protected = 4;
 }
 
 service BlockStorageService {
@@ -56,6 +56,9 @@ service BlockStorageService {
 
   rpc SetInuseBlockStorage(SetInuseBlockStorageRequest) returns (BlockStorage) {}
   rpc SetAvailableBlockStorage(SetAvailableBlockStorageRequest) returns (BlockStorage) {}
+
+  rpc ProtectBlockStorage(ProtectBlockStorageRequest) returns (BlockStorage) {}
+  rpc UnprotectBlockStorage(UnprotectBlockStorageRequest) returns (BlockStorage) {}
 
   rpc DownloadBlockStorage(DownloadBlockStorageRequest) returns (stream BlockStorageChunk) {}
 
@@ -110,8 +113,14 @@ message DeleteBlockStorageRequest {
 message SetInuseBlockStorageRequest {
   string name = 1;
 }
-
 message SetAvailableBlockStorageRequest {
+  string name = 1;
+}
+
+message ProtectBlockStorageRequest {
+  string name = 1;
+}
+message UnprotectBlockStorageRequest {
   string name = 1;
 }
 
