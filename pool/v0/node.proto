@@ -30,7 +30,7 @@ message NodeSpec {
   string availavility_zone = 9;
   string cell = 10;
   string rack = 11;
-  string unit = 12;
+  uint32 unit = 12;
 }
 
 message NodeStatus {
