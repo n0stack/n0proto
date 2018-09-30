@@ -5,22 +5,18 @@ option go_package = "github.com/n0stack/proto.go/pool/v0;ppool";
 package n0stack.pool;
 
 import "google/protobuf/empty.proto";
-import "v0/metadata.proto";
 import "budget/v0/network_interface.proto";
 
+
 message Network {
-  n0stack.Metadata metadata = 1;
-  NetworkSpec spec = 2;
-  NetworkStatus status = 3;
-}
+  string name = 1;
+  map<string, string> annotations = 3;
+  uint64 version = 5;
 
-message NetworkSpec {
-  string ipv4_cidr = 1;
-  string ipv6_cidr = 2;
-  string domain = 3;
-}
+  string ipv4_cidr = 10;
+  string ipv6_cidr = 11;
+  string domain = 12;
 
-message NetworkStatus {
   enum NetworkState {
     // falied state because failed some process on API.
     FAILED = 0;
@@ -30,23 +26,22 @@ message NetworkStatus {
 
     AVAILABLE = 2;
   }
-  NetworkState state = 1;
+  NetworkState state = 50;
 
-  map<string, n0stack.budget.NetworkInterface> reserved_network_interfaces = 2;
+  map<string, n0stack.budget.NetworkInterface> reserved_network_interfaces = 51;
 }
+
 
 service NetworkService {
   rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse) {}
-
   rpc GetNetwork(GetNetworkRequest) returns (Network) {}
-
   rpc ApplyNetwork(ApplyNetworkRequest) returns (Network) {}
-
   rpc DeleteNetwork(DeleteNetworkRequest) returns (google.protobuf.Empty) {}
 
-  rpc ReserveNetworkInterface(ReserveNetworkInterfaceRequest) returns (ReserveNetworkInterfaceResponse) {}
+  rpc ReserveNetworkInterface(ReserveNetworkInterfaceRequest) returns (Network) {}
   rpc ReleaseNetworkInterface(ReleaseNetworkInterfaceRequest) returns (google.protobuf.Empty) {}
 }
+
 
 message ListNetworksRequest {}
 message ListNetworksResponse{
@@ -58,8 +53,13 @@ message GetNetworkRequest {
 }
 
 message ApplyNetworkRequest {
-  n0stack.Metadata metadata = 1;
-  NetworkSpec spec = 2;
+  string name = 1;
+  map<string, string> annotations = 3;
+  uint64 version = 5;
+
+  string ipv4_cidr = 10;
+  string ipv6_cidr = 11;
+  string domain = 12;
 }
 
 message DeleteNetworkRequest {
@@ -67,20 +67,18 @@ message DeleteNetworkRequest {
 }
 
 message ReserveNetworkInterfaceRequest {
-  string name = 1;
+  string network_name = 1;
   string network_interface_name = 2;
 
-  n0stack.budget.NetworkInterface network_interface = 3;
-}
+  map<string, string> annotations = 3;
 
-message ReserveNetworkInterfaceResponse {
-  string name = 1;
-  string network_interface_name = 2;
+  string hardware_address = 4;
 
-  n0stack.budget.NetworkInterface network_interface = 3;
+  string ipv4_address = 5;
+  string ipv6_address = 6;
 }
 
 message ReleaseNetworkInterfaceRequest {
-  string name = 1;
+  string network_name = 1;
   string network_interface_name = 2;
 }

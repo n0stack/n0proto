@@ -5,27 +5,22 @@ option go_package = "github.com/n0stack/proto.go/provisioning/v0;pprovisioning";
 package n0stack.provisioning;
 
 import "google/protobuf/empty.proto";
-import "v0/metadata.proto";
+
 
 message BlockStorage {
-  n0stack.Metadata metadata = 1;
-  BlockStorageSpec spec = 2;
-  BlockStorageStatus status = 3;
-}
+  string name = 1;
+  map<string, string> annotations = 3;
 
-message BlockStorageSpec {
-  uint64 request_bytes = 1;
-  uint64 limit_bytes = 2;
+  uint64 request_bytes = 10;
+  uint64 limit_bytes = 11;
 
   // ISOか見極めたい気持ちがある
   // bool cd = 4;
-}
 
-message BlockStorageStatus {
   enum BlockStorageState {
     // falied state because failed some process on API.
     FAILED = 0;
-    
+
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 1;
 
@@ -33,24 +28,21 @@ message BlockStorageStatus {
     IN_USE = 3;
     PROTECTED = 4;
   }
-  BlockStorageState state = 1;
-  string state_reason = 2;
-  
-  string node_name = 3;
-  string storage_name = 4;
+  BlockStorageState state = 50;
+  string state_reason = 51;
+
+  string node_name = 52;
+  string storage_name = 53;
 }
+
 
 service BlockStorageService {
   rpc CreateBlockStorage(CreateBlockStorageRequest) returns (BlockStorage) {}
   rpc UploadBlockStorage(stream UploadBlockStorageRequest) returns (BlockStorage) {}
   rpc CopyBlockStorage(CopyBlockStorageRequest) returns (BlockStorage) {}
-
   rpc ListBlockStorages(ListBlockStoragesRequest) returns (ListBlockStoragesResponse) {}
-
   rpc GetBlockStorage(GetBlockStorageRequest) returns (BlockStorage) {}
-
   rpc UpdateBlockStorage(UpdateBlockStorageRequest) returns (BlockStorage) {}
-
   rpc DeleteBlockStorage(DeleteBlockStorageRequest) returns (google.protobuf.Empty) {}
 
   // AVAILABLE -> IN_USE
@@ -71,25 +63,34 @@ message BlockStorageChunk {
 }
 
 message CreateBlockStorageRequest {
-  n0stack.Metadata metadata = 1;
-  BlockStorageSpec spec = 2;
+  string name = 1;
+  map<string, string> annotations = 3;
+
+  uint64 request_bytes = 10;
+  uint64 limit_bytes = 11;
 }
 message UploadBlockStorageRequest {
-  message UploadBlockStorageHeader {
-    n0stack.Metadata metadata = 1;
-    BlockStorageSpec spec = 2;
+  message UploadBlockStorageMetadata {
+    string name = 1;
+    map<string, string> annotations = 3;
+
+    uint64 request_bytes = 10;
+    uint64 limit_bytes = 11;
   }
 
   oneof value {
-    UploadBlockStorageHeader header = 1;
+    UploadBlockStorageMetadata metadata = 1;
     BlockStorageChunk chunk = 2;
   }
 }
 message CopyBlockStorageRequest {
-  n0stack.Metadata metadata = 1;
-  BlockStorageSpec spec = 2;
+  string name = 1;
+  map<string, string> annotations = 3;
 
-  string source_block_storage = 3;
+  uint64 request_bytes = 10;
+  uint64 limit_bytes = 11;
+
+  string source_block_storage = 100;
 }
 
 message ListBlockStoragesRequest {}
@@ -102,8 +103,11 @@ message GetBlockStorageRequest {
 }
 
 message UpdateBlockStorageRequest {
-  n0stack.Metadata metadata = 1;
-  BlockStorageSpec spec = 2;
+  string name = 1;
+  map<string, string> annotations = 3;
+
+  uint64 request_bytes = 10;
+  uint64 limit_bytes = 11;
 }
 
 message DeleteBlockStorageRequest {
