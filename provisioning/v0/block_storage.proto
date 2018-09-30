@@ -28,17 +28,16 @@ message BlockStorageStatus {
     
     // unknown state because failed to connect for scheduled node after RUNNING.
     UNKNOWN = 1;
-    
+
     AVAILABLE = 2;
     IN_USE = 3;
+    PROTECTED = 4;
   }
   BlockStorageState state = 1;
+  string state_reason = 2;
   
-  string node_name = 2;
-  string storage_name = 3;
-
-  // IN_USE にならない
-  bool protected = 4;
+  string node_name = 3;
+  string storage_name = 4;
 }
 
 service BlockStorageService {
@@ -54,11 +53,12 @@ service BlockStorageService {
 
   rpc DeleteBlockStorage(DeleteBlockStorageRequest) returns (google.protobuf.Empty) {}
 
+  // AVAILABLE -> IN_USE
   rpc SetInuseBlockStorage(SetInuseBlockStorageRequest) returns (BlockStorage) {}
+  // -> AVAILABLE
   rpc SetAvailableBlockStorage(SetAvailableBlockStorageRequest) returns (BlockStorage) {}
-
-  rpc ProtectBlockStorage(ProtectBlockStorageRequest) returns (BlockStorage) {}
-  rpc UnprotectBlockStorage(UnprotectBlockStorageRequest) returns (BlockStorage) {}
+  // AVAILABLE -> PROTECTED
+  rpc SetProtectedBlockStorage(SetProtectedBlockStorageRequest) returns (BlockStorage) {}
 
   rpc DownloadBlockStorage(DownloadBlockStorageRequest) returns (stream BlockStorageChunk) {}
 
@@ -116,11 +116,7 @@ message SetInuseBlockStorageRequest {
 message SetAvailableBlockStorageRequest {
   string name = 1;
 }
-
-message ProtectBlockStorageRequest {
-  string name = 1;
-}
-message UnprotectBlockStorageRequest {
+message SetProtectedBlockStorageRequest {
   string name = 1;
 }
 
