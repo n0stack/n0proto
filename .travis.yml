@@ -20,11 +20,12 @@ script:
   - rm -r proto.go/*
   - docker run -it --rm -v $PWD:/src:ro -v $PWD/proto.go:/dst/github.com/n0stack/proto.go/ n0stack/build-proto --go_out=plugins=grpc:/dst
 
-after_success:
-  - cd proto.go
-  - git add --all
-  - git commit -m "Update for $TRAVIS_COMMIT on github.com/n0stack/proto with a travis job $TRAVIS_BUILD_ID"
-  - git push -f origin master
+after_success: |
+  if [[ "$TRAVIS_BRANCH" != "master" ]]; then exit 0; fi
+  cd proto.go
+  git add --all
+  git commit -m "Update for $TRAVIS_COMMIT on github.com/n0stack/proto with a travis job $TRAVIS_BUILD_ID"
+  git push -f origin master
 
 notifications:
   slack:
