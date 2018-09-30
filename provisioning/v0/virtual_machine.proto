@@ -57,7 +57,7 @@ message VirtualMachineStatus {
 }
 
 service VirtualMachineService {
-  rpc CreateVirtualMachine(ApplyVirtualMachineRequest) returns (VirtualMachine) {}
+  rpc CreateVirtualMachine(CreateVirtualMachineRequest) returns (VirtualMachine) {}
 
   rpc ListVirtualMachines(ListVirtualMachinesRequest) returns (ListVirtualMachinesResponse) {}
 
@@ -80,7 +80,7 @@ service VirtualMachineService {
   // rpc MigrateVirtualMachine(MigrateVirtualMachineRequest) returns (VirtualMachine) {}
 }
 
-message ApplyVirtualMachineRequest {
+message CreateVirtualMachineRequest {
   n0stack.Metadata metadata = 1;
   VirtualMachineSpec spec = 2;
 }
