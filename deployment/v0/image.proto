@@ -18,9 +18,9 @@ message Image {
     string block_storage_name = 1;
     google.protobuf.Timestamp registered_at = 2;
   }
-  repeated RegisteredBlockStorage registered_block_storages = 1;
+  repeated RegisteredBlockStorage registered_block_storages = 50;
   
-  map<string, string> tags = 2;
+  map<string, string> tags = 51;
 }
 
 
