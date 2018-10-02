@@ -1,6 +1,6 @@
 # Deployment
 
-- リソースの仮想化を宣言的におこなえるようにする
+- Provisionin を抽象化し、宣言的に定義できるようにする
 - この層は immutable なリソースを扱う
 
 ## immutable であるということは
