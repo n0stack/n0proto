@@ -38,11 +38,16 @@ message BlockStorage {
 
 service BlockStorageService {
   rpc CreateBlockStorage(CreateBlockStorageRequest) returns (BlockStorage) {}
-  rpc UploadBlockStorage(stream UploadBlockStorageRequest) returns (BlockStorage) {}
+  rpc FetchBlockStorage(FetchBlockStorageRequest) returns (BlockStorage) {}
   rpc CopyBlockStorage(CopyBlockStorageRequest) returns (BlockStorage) {}
+  // rpc UploadBlockStorage(stream UploadBlockStorageRequest) returns (BlockStorage) {}
+
   rpc ListBlockStorages(ListBlockStoragesRequest) returns (ListBlockStoragesResponse) {}
+
   rpc GetBlockStorage(GetBlockStorageRequest) returns (BlockStorage) {}
+
   rpc UpdateBlockStorage(UpdateBlockStorageRequest) returns (BlockStorage) {}
+
   rpc DeleteBlockStorage(DeleteBlockStorageRequest) returns (google.protobuf.Empty) {}
 
   // AVAILABLE -> IN_USE
@@ -52,7 +57,7 @@ service BlockStorageService {
   // AVAILABLE -> PROTECTED
   rpc SetProtectedBlockStorage(SetProtectedBlockStorageRequest) returns (BlockStorage) {}
 
-  rpc DownloadBlockStorage(DownloadBlockStorageRequest) returns (stream BlockStorageChunk) {}
+  // rpc DownloadBlockStorage(DownloadBlockStorageRequest) returns (stream BlockStorageChunk) {}
 
   // // when AVAILABLE, not IN_USE
   // rpc MigrateBlockStorage(MigrateBlockStorageRequest) returns (BlockStorage) {}
@@ -68,6 +73,15 @@ message CreateBlockStorageRequest {
 
   uint64 request_bytes = 10;
   uint64 limit_bytes = 11;
+}
+message FetchBlockStorageRequest {
+  string name = 1;
+  map<string, string> annotations = 3;
+
+  uint64 request_bytes = 10;
+  uint64 limit_bytes = 11;
+
+  string source_url = 100;
 }
 message UploadBlockStorageRequest {
   message UploadBlockStorageMetadata {
