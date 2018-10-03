@@ -31,6 +31,7 @@ service ImageService {
   rpc DeleteImage(DeleteImageRequest) returns (google.protobuf.Empty) {}
 
   rpc RegisterBlockStorage(RegisterBlockStorageRequest) returns (Image) {}
+  rpc UnregisterBlockStorage(UnregisterBlockStorageRequest) returns (Image) {}
   rpc GenerateBlockStorage(GenerateBlockStorageRequest) returns (n0stack.provisioning.BlockStorage) {}
 
   rpc TagImage(TagImageRequest) returns (Image) {}
@@ -62,6 +63,10 @@ message RegisterBlockStorageRequest {
   string block_storage_name = 2;
 
   repeated string tags = 3;
+}
+message UnregisterBlockStorageRequest {
+  string image_name = 1;
+  string block_storage_name = 2;
 }
 message GenerateBlockStorageRequest {
   string image_name = 1;
