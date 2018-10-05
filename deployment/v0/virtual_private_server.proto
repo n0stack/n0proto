@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option go_package = "github.com/n0stack/proto.go/deployment/v0;pdeployment";
+
+package n0stack.deployment;
+
+import "google/protobuf/empty.proto";
+import "provisioning/v0/virtual_machine.proto";
+
+
+message VirtualPrivateServer {
+  string name = 1;
+  map<string, string> annotations = 3;
+  uint64 version = 5;
+
+  uint32 limit_cpu_milli_core = 10;
+  uint64 limit_memory_bytes = 11;
+  string network_name = 12;
+}
+
+
+service VirtualPrivateServerService {
+  rpc ListVirtualPrivateServers(ListVirtualPrivateServersRequest) returns (ListVirtualPrivateServersResponse) {}
+  rpc GetVirtualPrivateServer(GetVirtualPrivateServerRequest) returns (VirtualPrivateServer) {}
+  rpc ApplyVirtualPrivateServer(ApplyVirtualPrivateServerRequest) returns (VirtualPrivateServer) {}
+  rpc DeleteVirtualPrivateServer(DeleteVirtualPrivateServerRequest) returns (google.protobuf.Empty) {}
+
+  rpc GenerateVirtualMachine(GenerateVirtualMachineRequest) returns (n0stack.provisioning.VirtualMachine) {}
+}
+
+
+message ListVirtualPrivateServersRequest {}
+message ListVirtualPrivateServersResponse {
+  repeated VirtualPrivateServer virtual_private_servers = 1;
+}
+
+message GetVirtualPrivateServerRequest {
+  string name = 1;
+}
+
+message ApplyVirtualPrivateServerRequest {
+  string name = 1;
+  map<string, string> annotations = 3;
+  uint64 version = 5;
+}
+
+message DeleteVirtualPrivateServerRequest {
+  string name = 1;
+}
+
+message GenerateVirtualMachineRequest {
+  string virtual_private_server_name = 1;
+
+  string virtual_machine_name = 2;
+  map<string, string> annotations = 3;
+
+  uint32 request_cpu_milli_core = 4;
+  uint64 request_memory_bytes = 5;
+
+  string image_name = 6;
+}
