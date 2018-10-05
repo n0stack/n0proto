@@ -70,12 +70,14 @@ message UnregisterBlockStorageRequest {
 }
 message GenerateBlockStorageRequest {
   string image_name = 1;
+  
+  string block_storage_name = 2;
   map<string, string> annotations = 3;
 
-  uint64 request_bytes = 10;
-  uint64 limit_bytes = 11;
+  uint64 request_bytes = 4;
+  uint64 limit_bytes = 5;
 
-  string tag = 100;
+  string tag = 6;
 }
 
 message TagImageRequest {
