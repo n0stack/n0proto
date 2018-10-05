@@ -8,7 +8,7 @@ import "google/protobuf/empty.proto";
 import "provisioning/v0/virtual_machine.proto";
 
 
-message VirtualPrivateServer {
+message Flavor {
   string name = 1;
   map<string, string> annotations = 3;
   uint64 version = 5;
@@ -19,37 +19,37 @@ message VirtualPrivateServer {
 }
 
 
-service VirtualPrivateServerService {
-  rpc ListVirtualPrivateServers(ListVirtualPrivateServersRequest) returns (ListVirtualPrivateServersResponse) {}
-  rpc GetVirtualPrivateServer(GetVirtualPrivateServerRequest) returns (VirtualPrivateServer) {}
-  rpc ApplyVirtualPrivateServer(ApplyVirtualPrivateServerRequest) returns (VirtualPrivateServer) {}
-  rpc DeleteVirtualPrivateServer(DeleteVirtualPrivateServerRequest) returns (google.protobuf.Empty) {}
+service FlavorService {
+  rpc ListFlavors(ListFlavorsRequest) returns (ListFlavorsResponse) {}
+  rpc GetFlavor(GetFlavorRequest) returns (Flavor) {}
+  rpc ApplyFlavor(ApplyFlavorRequest) returns (Flavor) {}
+  rpc DeleteFlavor(DeleteFlavorRequest) returns (google.protobuf.Empty) {}
 
   rpc GenerateVirtualMachine(GenerateVirtualMachineRequest) returns (n0stack.provisioning.VirtualMachine) {}
 }
 
 
-message ListVirtualPrivateServersRequest {}
-message ListVirtualPrivateServersResponse {
-  repeated VirtualPrivateServer virtual_private_servers = 1;
+message ListFlavorsRequest {}
+message ListFlavorsResponse {
+  repeated Flavor flavors = 1;
 }
 
-message GetVirtualPrivateServerRequest {
+message GetFlavorRequest {
   string name = 1;
 }
 
-message ApplyVirtualPrivateServerRequest {
+message ApplyFlavorRequest {
   string name = 1;
   map<string, string> annotations = 3;
   uint64 version = 5;
 }
 
-message DeleteVirtualPrivateServerRequest {
+message DeleteFlavorRequest {
   string name = 1;
 }
 
 message GenerateVirtualMachineRequest {
-  string virtual_private_server_name = 1;
+  string flavor_name = 1;
 
   string virtual_machine_name = 2;
   map<string, string> annotations = 3;
