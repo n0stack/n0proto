@@ -15,7 +15,8 @@ message Flavor {
 
   uint32 limit_cpu_milli_core = 10;
   uint64 limit_memory_bytes = 11;
-  string network_name = 12;
+  uint64 limit_storage_bytes = 12;
+  string network_name = 13;
 }
 
 
@@ -60,6 +61,7 @@ message GenerateVirtualMachineRequest {
 
   uint32 request_cpu_milli_core = 4;
   uint64 request_memory_bytes = 5;
+  uint64 request_storage_bytes = 6;
 
-  string image_name = 6;
+  string image_name = 7;
 }
